@@ -235,11 +235,9 @@ We encompass all possible polling issues in a bias term. We use a bias term that
 
 <img src="../img/blog/bias_influence.png">
 
-We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples, but this also indicates that even 538 underestimated the polling biases.
+We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples [REF], but this also indicates that even 538 underestimated the polling biases.
 
 You can check how the bias impacts the results of each state election for yourself:
-
-D3 MAP here
 
 <div id="tooltip"></div><!-- div to hold tooltip. -->
 <div id="container" class="svg-container"> </div>
@@ -358,18 +356,16 @@ D3 MAP here
 
 <center><img src="../img/blog/elections_graphical_model.svg" width="60%"></center>
 
-<p>How do you aggregate the information of each state poll in a globally coherent prediction? We can use a hierarchical Bayesian model. Overall, each poll’s likelihood is modelled as a multinomial, with dirichlet prior (per state) and normal hyper-prior (per nation). This way, prior information is shared across states and we can use weak hyper-priors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
+<p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modelled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
-$$ \alpha_c \sim Uniform(0, 1000), c \in {Trump, Clinton, Independents} $$
+$$ \alpha_c \sim Uniform(0, 1000), c \in [Trump, Clinton, Independents] $$
 
 <p>Then, we have the voting intention in each state, with the national preference as prior:</p>
 $$ \theta_s \sim Dirichlet(\alpha), s \in States $$
 <p>Finally, each poll is modeled as one independent sample of the voting intention of the state:</p>
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}), s \in States, d \in Dates $$
 
-
-<p>Bayesian inference of the posteriors</p>
-
+<p>After writing this model in Stan (see code in section below), we sample the posteriors of the unkwnown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of unseen variables after observing statiscally related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
 <p>To forecast the probability of each candidate winning the state election, we use the posterior of the voting intentions to sample the election result of the state. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
 
@@ -377,19 +373,16 @@ $$ election_s \sim Multinomial(\theta_s, N_{voters_s}), s \in States $$
 
 <p>The candidate with more votes takes all the electoral colleges of the state (we ignore the particularities of Nebraska and Maine). We sum the electoral colleges votes of each candidates, and if a candidate wins 270 votes or more, he or she is the winner. We repeat this process multiple times in order to determine the probability of each candidate winning the election.</p>
 
+<p>We sample the election result in all states multiple times, and for each time we calculate the number of electoral colleges won by each candidate, and the corresponding victor.</p>
 
-<p>We sample the election result in all states multiple times, and for each time we calculate the number of electoral colleges won by each candidate, and the corresponding victor. We implemented the model in PyStan.</p>
-
-
-To test how much our model is robust to polling errors, we add a small bias term in the election prediciton:
+To add the bias term in our forecast to account for all the polling issues already cited, we make a simple change to the predictive model:
+<!--To test how much our model is robust to polling errors, we add a small bias term in the election prediciton:-->
 $$ \theta^{bias}_s \leftarrow [\theta_{s_{Clinton}}  - bias, \theta_{s_{Trump}}  + bias, theta_{s_{Ind}}] \\
 bias \sim Uniform(0, \epsilon) \\
 election_s \sim Multinomial(\theta^{bias}_s, N^{voters}_s) \\
 s \in States $$
 
-
-We vary \( \epsilon \) from 0 to 3% and see how it effects our election forecast:
-
+This bias always stochastically favors Trump. In our experiments above, we vary \( \epsilon \) from 0 to 5%.
 
 <h4 class="text_h4">Code</h4>
 
