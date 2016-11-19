@@ -8,10 +8,106 @@
 
     <!-- CSS  -->
     <link href="../min/plugin-min.css" type="text/css" rel="stylesheet">
-    <link href="../min/custom-min.css" type="text/css" rel="stylesheet" >
+    <link href="../min/custom-min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="../js/blog/highlight/styles/default.css">
+
 
     <!-- JS  -->
     <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="../js/blog/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <style type="text/css">
+    /*body{margin:40px
+auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
+10px}h1,h2,h3{line-height:1.2}*/
+    .state{
+        fill: none;
+        stroke: #a9a9a9;
+        stroke-width: 1;
+    }
+    .state:hover{
+        fill-opacity:0.5;
+    }
+    #tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 20px;
+        margin: 10px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 1px;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    #tooltip h4{
+        margin:0;
+        font-size:14px;
+    }
+    #tooltip{
+        background:rgba(0,0,0,0.9);
+        border:1px solid grey;
+        border-radius:5px;
+        font-size:12px;
+        width:auto;
+        padding:4px;
+        color:white;
+        opacity:0;
+    }
+    #tooltip table{
+        /*table-layout:fixed;*/
+    }
+    #tooltip tr td{
+        padding:0;
+        margin:0;
+    }
+    #tooltip tr td:nth-child(1){
+        width:50px;
+    }
+    #tooltip tr td:nth-child(2){
+        text-align:center;
+    }
+    .svg-content {
+        display: inline-block;
+        top: 0;
+        left: 0;
+    }
+
+    .ticks {
+      font: 10px sans-serif;
+    }
+
+    .track,
+    .track-inset,
+    .track-overlay {
+      stroke-linecap: round;
+    }
+
+    .track {
+      stroke: #000;
+      stroke-opacity: 0.3;
+      stroke-width: 10px;
+    }
+
+    .track-inset {
+      stroke: #ddd;
+      stroke-width: 8px;
+    }
+
+    .track-overlay {
+      pointer-events: stroke;
+      stroke-width: 50px;
+      cursor: crosshair;
+    }
+
+    .handle {
+      fill: #fff;
+      stroke: #000;
+      stroke-opacity: 0.5;
+      stroke-width: 1.25px;
+    }
+</style>
+
 </head>
 
 <body id="top" class="scrollspy">
@@ -157,6 +253,118 @@ You can check how the bias impacts the result for yourself:
 
 D3 MAP here
 
+<div id="tooltip"></div><!-- div to hold tooltip. -->
+<div id="container" class="svg-container"> </div>
+<div id="slider"> </div>
+
+
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script src="../js/blog/uStates.js"></script>
+
+<script>
+    function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
+        return "<h4>"+n+"</h4><table>"+
+            "<tr><td>Clinton</td><td>"+(d.clinton)+"%</td></tr>"+
+            "<tr><td>Trump</td><td>"+(d.trump)+"%</td></tr>"+
+            "<tr><td>Others</td><td>"+(d.others)+"%</td></tr>"+
+            "</table>";
+    }
+
+    var sampleData ={}; /* Sample random data. */
+    ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+    "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+    "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+    "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+    "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+        .forEach(function(d){
+            var trump = Math.round(100*Math.random());
+            var clinton = 100.0 - trump;
+            var others = 0.0;
+            if(trump > clinton)
+                var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
+            else
+                var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
+
+
+            sampleData[d]={trump: trump, clinton: clinton, others: others,
+                           color: color};//d3.interpolate("#448AFF", "#D32F2F")(trump/100.0)};
+        });
+
+    var svg = d3.select("div#container")
+                .append("svg")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 1000 600")
+                .classed("svg-content", true)
+                .attr("id", "statesvg");
+    /* draw states on id #statesvg */
+    uStates.draw('#statesvg', sampleData, tooltipHtml);
+
+    var svg = d3.select("#slider").append("svg").attr("height", "50").attr("width", "600"),
+        margin = {right: 50, left: 50},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height");
+
+    var x = d3.scaleLinear()
+                .domain([0, 5])
+                .range([0, width])
+                .clamp(true);
+
+    var slider = svg.append("g")
+        .attr("class", "slider")
+        .attr("transform", "translate(" + margin.left + "," + height / 2 + ")");
+
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function() { hue(x.invert(d3.event.x)); }));
+
+    slider.insert("g", ".track-overlay")
+        .attr("class", "ticks")
+        .attr("transform", "translate(0," + 18 + ")")
+      .selectAll("text")
+      .data(x.ticks(10))
+      .enter().append("text")
+        .attr("x", x)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return d + "%"; });
+
+    var handle = slider.insert("circle", ".track-overlay")
+        .attr("class", "handle")
+        .attr("r", 9);
+
+    function hue(h) {
+      handle.attr("cx", x(h));
+        ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+    "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+    "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+    "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+    "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+        .forEach(function(d){
+            var trump = Math.round(100*Math.random());
+            var clinton = 100.0 - trump;
+            var others = 0.0;
+            if(trump > clinton)
+                var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
+            else
+                var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
+
+
+            sampleData[d]={trump: trump, clinton: clinton, others: others,
+                           color: color};
+        });
+        d3.select("#statesvg").selectAll(".state")
+            .style("fill",function(d){ return sampleData[d.id].color; })
+      //svg.style("background-color", d3.hsl(h, 0.8, 0.8));
+    }
+</script>
+
 
 <h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
 
@@ -200,8 +408,8 @@ We vary \( \epsilon \) from 0 to 3% and see how it effects our election forecast
 
 Stan code -- nothing more than that -- link the github notebook here
 
-<xmp>
-data {
+<pre>
+<code class="stan">data {
     int nb_polls;
     int nb_states;
     int nb_candidates;
@@ -244,7 +452,8 @@ generated quantities {
         votes_pred[s] <- multinomial_rng(theta_bias[s], nb_voters[s]);
     }
 }
-</xmp>
+</code>
+</pre>
 
 <h4 class="text_h4">Conclusion</h4>
 
