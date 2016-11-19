@@ -150,8 +150,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <center><span class="span_h2">We use a hierarchical Bayesian model to show how a simple pro-Trump bias has a huge effect on the forecasting results.</span></center>
 <br>
 
-<h4 class="text_h4">Introduction</h4>
-
 <p>Unlike other countries, where presidential elections follow a simple majority rule, the US election follows a different set of rules that makes it very hard for outsiders to understand what is going on. However, the idea is quite simple: each state has a number of electoral college votes, totalling 538 votes across the nation. The winner candidate of each state election takes all of its electoral college votes (with two exceptions). If a candidate receives 270 electoral votes or more overall, he or she wins the election. This makes the US election an interesting forecasting problem. Instead of predicting the total number of votes in each candidate, the problem is forecasting the result of each state individually.</p>
 
 <q>Prediction is very difficult, especially if it's about the future.</q>
@@ -174,7 +172,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h4 class="text_h4">Forecast</h4>
 
-<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls should be recent and of good quality (determined by appropriate methodology, past successes, etc). As a proxy of quality, we use the letter grades from 538 [REF\.</p>
+<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls should be recent and of good quality (determined by appropriate methodology, past successes, etc). As a proxy of quality, we use the grades from 538 [REF].</p>
 
 <p>We found that the simple choice of which polls to use has a very large impact on the probability of victory of each candidate:</p>
 <div class="card">
@@ -185,30 +183,30 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
       <th data-field="id">Polling choice</th>
       <th data-field="name">Clinton (%)</th>
       <th data-field="price">Trump (%)</th>
-      <th data-field="price">Others (%)</th>
+      <th data-field="price">Neither (%)</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td>Last with good grade</td>
+    <td>Last poll with good grade (above X)</td>
     <td></td>
     <td></td>
     <td></td>
   </tr>
   <tr>
-    <td>Best 3 grades over the last month</td>
+    <td>Polls with the best 3 grades (over the last month)</td>
     <td></td>
     <td></td>
     <td></td>
   </tr>
   <tr>
-    <td>Last 3 with good grade</td>
+    <td>Last 3 polls with good grade (above Y)</td>
     <td></td>
     <td></td>
     <td></td>
   </tr>
   <tr>
-    <td>All last week</td>
+    <td>All from last week</td>
     <td></td>
     <td></td>
     <td></td>
@@ -252,7 +250,7 @@ You can check how the bias impacts the results of each state election for yourse
         return "<h4>"+n+"</h4><table>"+
             "<tr><td>Clinton</td><td>"+(d.clinton)+"%</td></tr>"+
             "<tr><td>Trump</td><td>"+(d.trump)+"%</td></tr>"+
-            "<tr><td>Others</td><td>"+(d.others)+"%</td></tr>"+
+            "<tr><td>Neither</td><td>"+(d.neither)+"%</td></tr>"+
             "</table>";
     }
 
@@ -265,14 +263,14 @@ You can check how the bias impacts the results of each state election for yourse
         .forEach(function(d){
             var trump = Math.round(100*Math.random());
             var clinton = 100.0 - trump;
-            var others = 0.0;
+            var neither = 0.0;
             if(trump > clinton)
                 var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
             else
                 var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
 
 
-            sampleData[d]={trump: trump, clinton: clinton, others: others,
+            sampleData[d]={trump: trump, clinton: clinton, neither: neither,
                            color: color};//d3.interpolate("#448AFF", "#D32F2F")(trump/100.0)};
         });
 
@@ -335,14 +333,14 @@ You can check how the bias impacts the results of each state election for yourse
         .forEach(function(d){
             var trump = Math.round(100*Math.random());
             var clinton = 100.0 - trump;
-            var others = 0.0;
+            var neither = 0.0;
             if(trump > clinton)
                 var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
             else
                 var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
 
 
-            sampleData[d]={trump: trump, clinton: clinton, others: others,
+            sampleData[d]={trump: trump, clinton: clinton, neither: neither,
                            color: color};
         });
         d3.select("#statesvg").selectAll(".state")
@@ -367,7 +365,7 @@ $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}), s \in States, d \in Da
 
 <p>After writing this model in Stan (see code in section below), we sample the posteriors of the unkwnown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of unseen variables after observing statiscally related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
-<p>To forecast the probability of each candidate winning the state election, we use the posterior of the voting intentions to sample the election result of the state. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
+<p>To forecast the probability of each candidate winning the state election, we use the same multinomial likelihood that was used for the inference. However, now the voting intentions are the posterior given the polls, and number of voters is chosen to match 2012 numbers. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
 
 $$ election_s \sim Multinomial(\theta_s, N_{voters_s}), s \in States $$
 
