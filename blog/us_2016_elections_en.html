@@ -152,38 +152,29 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h4 class="text_h4">Introduction</h4>
 
-<p>Unlike other countries, where presidential elections follow a simple majority rule, the US election follows a different set of rules that makes it very hard for outsiders to understand what is going on. However, the idea is quite simple: each state has a number of electoral college votes, totalling 538 votes across the nation. The winner candidate of each state election takes all its electoral college votes. If a candidate receives 270 electoral votes or more overall, he or she wins the election. This makes the US election an interesting forecasting problem. Instead of predicting the total number of votes in each candidate, the problem is forecasting the result of each state individually.</p>
+<p>Unlike other countries, where presidential elections follow a simple majority rule, the US election follows a different set of rules that makes it very hard for outsiders to understand what is going on. However, the idea is quite simple: each state has a number of electoral college votes, totalling 538 votes across the nation. The winner candidate of each state election takes all of its electoral college votes (with two exceptions). If a candidate receives 270 electoral votes or more overall, he or she wins the election. This makes the US election an interesting forecasting problem. Instead of predicting the total number of votes in each candidate, the problem is forecasting the result of each state individually.</p>
 
+<q>Prediction is very difficult, especially if it's about the future.</q>
 
-"Prediction is very difficult, especially if it's about the future." Niels Bohr (DISPUTED)
-
-
-“An economist is an expert who will know tomorrow why the things he predicted yesterday didn't happen today.” Laurence Peter
-
-
-
-<p>Our interest is not to forecast the election, which is not a random variable anymore (spoiler alert: Trump won). We want to show how a simple Bayesian forecasting model works, and propose a modification that explains why statistical models would fail so badly in this election if there were polling biases.</p>
-
+<p>Our interest is not to forecast the election, which is not a random variable anymore (spoiler alert: Trump won). We want to show how a Bayesian forecasting model works, and propose a modification that explains why statistical models would fail so badly in this election if there were polling biases.</p>
 
 <h4 class="text_h4">Polling</h4>
 
-<p>In theory, a poll should randomly sample the voting population (the sampling is often stratified). However, in practice there are several possible polling problems that can compromise their use in naive statistical analyses:</p>
+<p>In theory, a poll should randomly sample the voting population, and the sampling is often stratified. However, in practice there are several possible polling problems that can compromise their use in naive statistical analyses:</p>
 <ul class="collection">
-    <li class="collection-item"><b><a href="https://en.wikipedia.org/wiki/Shy_Tory_Factor">Shy tory</a></b> / <b><a href="https://en.wikipedia.org/wiki/Bradley_effect">Bradley effect</a></b> / <b>“shame” effect</b>: Voters are not comfortable with revealing their particular preference</li>
-    <li class="collection-item"><b>Selection bias</b>: People who answer the pollsters are from a particular group (e.g. people who usually are at home are different in general from people who usually aren’t)</li>
+    <li class="collection-item"><b><a href="https://en.wikipedia.org/wiki/Shy_Tory_Factor">Shy tory</a></b> / <b><a href="https://en.wikipedia.org/wiki/Bradley_effect">Bradley effect</a></b> / <b>“shame” effect</b>: Voters are not comfortable with revealing their particular preference.</li>
+    <li class="collection-item"><b>Selection bias</b>: People who answer the pollsters are from a particular group (e.g. people who usually are at home at a certain time).</li>
     <li class="collection-item"><b>Stratification errors</b>: Wrong subpopulation determination.</li>
-    <li class="collection-item"><b>Non-voting correlation with a candidate</b>: As voting is not mandatory, the presidential preference of some people may be correlated with their chance of (not) voting</li>
-    <li class="collection-item"><b>Temporal preference change</b>: The preferences change over time -- a lot of people make up their minds in the last week</li>
-    <li class="collection-item"><b>Sampling error</b>: Any sample from the population will be noisy and subject to sampling errors.</li>
+    <li class="collection-item"><b>Non-voting correlation with a candidate</b>: As voting is not mandatory, the presidential preference of some people may be correlated with their chance of (not) voting.</li>
+    <li class="collection-item"><b>Temporal preference change</b>: The preferences change over time -- a lot of people make up their minds in the last week.</li>
+    <li class="collection-item"><b>Sample noise</b>: Any sample from the population will be noisy.</li>
 </ul>
 
-
-<p>Simple forecasts usually only consider the last item when estimating the margins of error or uncertainty. If you only consider this and nothing more, multiple polls will be treated as independent, and the overall error will reduce until there is absolute certainty (which is never the case). The other effects are not directly available for modeling, so the only way to estimate them is by making assumptions or using polling results from previous elections. We do not attempt to model exactly those issues here, we rather include all of them in a bias term that is shared across all polls, and show that even a small bias term favorable to Trump completely changes the forecast.</p>
+<p>Simple forecasts usually only consider the last item when estimating the margins of error or uncertainty. If you only consider this and nothing more, multiple polls will be treated as independent, and the overall error will reduce until there is absolute certainty (which is never the case). The other effects are not directly available for modeling, so the only way to estimate them is by making strong assumptions or using polling results from previous elections. We do not attempt to model exactly those issues here, we rather include all of them in a bias term that is shared across all polls, and show that even a small bias term favorable to Trump completely changes the forecast.</p>
 
 <h4 class="text_h4">Forecast</h4>
 
-<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. It is important that the poll is recent and of good quality (appropriate methodology, history, etc). As a proxy of quality, we use the letter grades from 538.</p>
-
+<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls should be recent and of good quality (determined by appropriate methodology, past successes, etc). As a proxy of quality, we use the letter grades from 538 [REF\.</p>
 
 <p>We found that the simple choice of which polls to use has a very large impact on the probability of victory of each candidate:</p>
 <div class="card">
@@ -235,21 +226,18 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
 538: Clinton at 71.4% and Trump at 28.6% http://projects.fivethirtyeight.com/2016-election-forecast/)</p>
 
 
-<p>Of the mainstream forecasters, only 538 cannot be included in the same bucket of almost-certain Clinton victory. Notice that the other forecasts are consistent with our own results. How come so many forecasters made such egregious mistakes? As in many statistical problems, the answer lies with the data: garbage in, garbage out.</p>
+<p>Of the mainstream forecasters, only 538 cannot be included in the same bucket of almost-certain Clinton victory. Notice that the other forecasts are consistent with our own results shown in the previous table. How come the forecasters, including us, made such egregious mistakes? As in many statistical problems, the answer lies with the data: <em>garbage in, garbage out</em>.</p>
 
 
 <h4 class="text_h4">Bias impact</h4>
 
-<b>Explicar bias aqui</b>
+We encompass all possible polling issues in a bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference from Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:
 
 <img src="../img/blog/bias_influence.png">
 
-
 We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples, but this also indicates that even 538 underestimated the polling biases.
 
-
-You can check how the bias impacts the result for yourself:
-
+You can check how the bias impacts the results of each state election for yourself:
 
 D3 MAP here
 
@@ -364,7 +352,6 @@ D3 MAP here
       //svg.style("background-color", d3.hsl(h, 0.8, 0.8));
     }
 </script>
-
 
 <h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
 
