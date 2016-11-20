@@ -356,29 +356,29 @@ You can check how the bias impacts the results of each state election for yourse
 
 <p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modelled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
-$$ \alpha_c \sim Uniform(0, 1000), c \in [Trump, Clinton, Independents] $$
+$$ \alpha_c \sim Uniform(0, 1000), c \in [Trump, Clinton, Ind.] $$
 
 <p>Then, we have the voting intention in each state, with the national preference as prior:</p>
-$$ \theta_s \sim Dirichlet(\alpha), s \in States $$
+$$ \theta_s = [\theta^{Trump}_s, \theta^{Clinton}_s, \theta^{Ind.}_s] \\
+   \theta_s \sim Dirichlet(\alpha) $$
 <p>Finally, each poll is modeled as one independent sample of the voting intention of the state:</p>
-$$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}), s \in States, d \in Dates $$
-
+$$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
+   s \in States, d \in Dates $$
 <p>After writing this model in Stan (see code in section below), we sample the posteriors of the unkwnown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of unseen variables after observing statiscally related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
 <p>To forecast the probability of each candidate winning the state election, we use the same multinomial likelihood that was used for the inference. However, now the voting intentions are the posterior given the polls, and number of voters is chosen to match 2012 numbers. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
 
-$$ election_s \sim Multinomial(\theta_s, N_{voters_s}), s \in States $$
+$$ election_s \sim Multinomial(\theta_s, N_{voters_s}) $$
 
 <p>The candidate with more votes takes all the electoral colleges of the state (we ignore the particularities of Nebraska and Maine). We sum the electoral colleges votes of each candidates, and if a candidate wins 270 votes or more, he or she is the winner. We repeat this process multiple times in order to determine the probability of each candidate winning the election.</p>
 
 <p>We sample the election result in all states multiple times, and for each time we calculate the number of electoral colleges won by each candidate, and the corresponding victor.</p>
 
 To add the bias term in our forecast to account for all the polling issues already cited, we make a simple change to the predictive model:
-<!--To test how much our model is robust to polling errors, we add a small bias term in the election prediciton:-->
-$$ \theta^{bias}_s \leftarrow [\theta_{s_{Clinton}}  - bias, \theta_{s_{Trump}}  + bias, theta_{s_{Ind}}] \\
+$$ \theta^{bias}_s \leftarrow [\theta^{Trump}_s  + \text{bias}, \theta^{Clinton}_s - \text{bias}, \theta^{Ind.}_s] \\
 bias \sim Uniform(0, \epsilon) \\
 election_s \sim Multinomial(\theta^{bias}_s, N^{voters}_s) \\
-s \in States $$
+$$
 
 This bias always stochastically favors Trump. In our experiments above, we vary \( \epsilon \) from 0 to 5%.
 
@@ -501,12 +501,12 @@ s.setAttribute('data-timestamp', +new Date());
                 </ul>
             </div>
             <div id="mc_embed_signup" class="col l6 s12">
-<form action="//datart.us14.list-manage.com/subscribe/post?u=7ce6eb27d2a3f36ad4eb827cf&amp;id=6c404a096d" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                <form action="//datart.us14.list-manage.com/subscribe/post?u=7ce6eb27d2a3f36ad4eb827cf&amp;id=02e357291c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                     <div class="row">
                         <div class="input-field col s8">
                             <i class="mdi-communication-email prefix white-text"></i>
-                            <input id="icon_email" name="email" type="email" class="validate white-text">
-                            <label for="icon_email" class="white-text">Subscribe to our newsletter</label>
+                            <input id="mce-EMAIL" name="email" type="email" class="validate white-text">
+                            <label for="mce-EMAIL" class="white-text">Subscribe to our newsletter</label>
                         </div>
                         <br><div class="col col s4">
                             <button class="btn waves-effect waves-light red darken-1" type="submit" name="subscribe" id="mc-embedded-subscribe">Submit
@@ -519,7 +519,7 @@ s.setAttribute('data-timestamp', +new Date());
                         <div class="response" id="mce-success-response" style="display:none"></div>
                     </div> 
                     <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_7ce6eb27d2a3f36ad4eb827cf_6c404a096d" tabindex="-1" value=""></div>
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_7ce6eb27d2a3f36ad4eb827cf_02e357291c" tabindex="-1" value=""></div>
                 </form>
             </div>
             <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
@@ -531,7 +531,6 @@ s.setAttribute('data-timestamp', +new Date());
         </div> -->
     </div>
 </footer>
-
 
 <!--  Scripts-->
 <script src="../min/plugin-min.js"></script>
