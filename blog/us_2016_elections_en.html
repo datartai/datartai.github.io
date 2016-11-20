@@ -143,7 +143,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <div id="intro" class="section scrollspy">
 <div class="container">
 <div class="row">
-<div class="col s10 offset-s1">
+<div class="col s9 offset-s1">
 
 <h2 class="center header text_h2">How (<b>not</b>) to forecast an election</h2>
 
@@ -152,7 +152,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>Unlike other countries, where presidential elections follow a simple majority rule, the US election follows a different set of rules that makes it very hard for outsiders to understand what is going on. However, the idea is quite simple: each state has a number of electoral college votes, totalling 538 votes across the nation. The winner candidate of each state election takes all of its electoral college votes (with two exceptions). If a candidate receives 270 electoral votes or more overall, he or she wins the election. This makes the US election an interesting forecasting problem. Instead of predicting the total number of votes in each candidate, the problem is forecasting the result of each state individually.</p>
 
-<q>Prediction is very difficult, especially if it's about the future.</q>
+<center><span class="span_h2">Prediction is very difficult, especially if it's about the future.<sup><a href="https://en.wikiquote.org/wiki/Niels_Bohr#Disputed">1</a></sup></q></span></center>
 
 <p>Our interest is not to forecast the election, which is not a random variable anymore (spoiler alert: Trump won). We want to show how a Bayesian forecasting model works, and propose a modification that explains why statistical models would fail so badly in this election if there were polling biases.</p>
 
@@ -172,7 +172,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h4 class="text_h4">Forecast</h4>
 
-<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls should be recent and of good quality (determined by appropriate methodology, past successes, etc). As a proxy of quality, we use the grades from 538 [REF].</p>
+<p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls should be recent and of good quality (determined by appropriate methodology, past successes, etc). As a proxy of quality, we use the grades from 538.<sup><a href="http://projects.fivethirtyeight.com/pollster-ratings/">2</a></sup></p>
 
 <p>We found that the simple choice of which polls to use has a very large impact on the probability of victory of each candidate:</p>
 <div class="card">
@@ -218,11 +218,12 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 
 <p>By aggregating the polls with different weights (e.g. according to their quality or distance from election), we would have endless forecasting possibilities, which explains the diversity found in the media before the election:
-NY Times: 85% Clinton, 15% Trump http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0
-Huff Post: 98% Clinton, 1.7% Trump http://elections.huffingtonpost.com/2016/forecast/president
-Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11/08/final-mode-projections-clinton-323-ev-51-di-senate-seats-gop-house/
-538: Clinton at 71.4% and Trump at 28.6% http://projects.fivethirtyeight.com/2016-election-forecast/)</p>
-
+<ul>
+<li>New York Times<sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">3</a></sup>: 85% Clinton, 15% Trump </li>
+<li>Huffington Post<sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">4</a></sup>: 98% Clinton, 1.7% Trump </li>
+<li>Princeton Election Consortium<sup><a href="http://election.princeton.edu/2016/11/08/final-mode-projections-clinton-323-ev-51-di-senate-seats-gop-house/">5</a></sup>: 93% Clinton </li>
+<li>538<sup><a href="http://projects.fivethirtyeight.com/2016-election-forecast/">6</a></sup>: 71.4% Clinton, 28.6% Trump </li>
+</ul>
 
 <p>Of the mainstream forecasters, only 538 cannot be included in the same bucket of almost-certain Clinton victory. Notice that the other forecasts are consistent with our own results shown in the previous table. How come the forecasters, including us, made such egregious mistakes? As in many statistical problems, the answer lies with the data: <em>garbage in, garbage out</em>.</p>
 
@@ -484,11 +485,48 @@ generated quantities {
 
 <h4 class="text_h4">Conclusion</h4>
 
+<p>Even though the 2016 election was one of most surprising polling misses in recent years, the result was not a black swan. Nassim Nicholas Taleb pointed out, before the election, that the mainstream forecasts were not reliable due to their significant volatility. According to his model based on option theory, this volatility should have pulled the probabilities toward 50-50<a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">[ref]</a>. As a follow-up, if there is general interest, we want to explore a time-series model where the voting intentions follow a random walk. To do this, we need to change the underlying model to allow the unseen random walk influence the polling results. Following Andrew Gelman’s suggestion, we can change the Dirichlet prior to a softmax prior, and then we can make the softmax parameters follow a random walk <a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">[ref]</a>. Let this election be a lesson on how a naive treatment of data can lead the media and even specialists astray.</p>
 
-Conlusão mais geral, porque o parágrafo seguinte são os próximos passos:
+<br>
+<br>
 
+<div id="content" class="row">
+  <div class="col" >
+    <img src="../img/pedro.jpg" height="75px" alt=""/>
+  </div>
+  <div class="col" >
+    <h5>Pedro Tabacof</h5>
+    Co-founder and chief science officer at Datart.
+    <a class="blue-text text-lighten-2" href="https://github.com/tabacof">
+    <i class="fa fa-github-square"></i>
+    </a>
+    <a class="blue-text text-lighten-2" href="https://twitter.com/pedrotabacof">
+    <i class="fa fa-twitter-square"></i>
+    </a>
+    <a class="blue-text text-lighten-2" href="https://br.linkedin.com/in/tabacof">
+    <i class="fa fa-linkedin-square"></i>
+    </a>
+  </div>
+</div>
 
-<p>Nassim Taleb said before the election that the forecasts were not reliable due to their significant volatility (which according to his model should have pulled the probabilities toward 50-50)<a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">[ref]</a>. As a follow-up, if there is general interest, we want to explore a time-series model where the voting intentions follow a random walk. To do this, we need to change the underlying model to allow the unseen random walk influence the polling results. Following Andrew Gelman’s suggestion, we can change the Dirichlet prior to a softmax prior, and then we can make the softmax parameters follow a random walk <a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">[ref]</a></p>
+<div id="content" class="row">
+  <div class="col" >
+    <img src="../img/ramon.jpg" height="75px" alt=""/>
+  </div>
+  <div class="col">
+    <h5>Ramon Oliveira</h5>
+    Co-founder and chief technological officer at Datart.
+    <a class="blue-text text-lighten-2" href="https://github.com/ramon-oliveira">
+        <i class="fa fa-github-square"></i>
+    </a>
+    <a class="blue-text text-lighten-2" href="https://twitter.com/ramon_roliveira">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    <a class="blue-text text-lighten-2" href="https://www.linkedin.com/in/ramon-roliveira">
+        <i class="fa fa-linkedin-square"></i>
+    </a>
+  </div>
+</div>
 
 </div>
 </div>
