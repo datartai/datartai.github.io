@@ -218,11 +218,12 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 
 <p>By aggregating the polls with different weights (e.g. according to their quality or distance from election), we would have endless forecasting possibilities, which explains the diversity found in the media before the election:
-<ul>
-<li>New York Times<sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">5</a></sup>: 85% Clinton, 15% Trump </li>
-<li>Huffington Post<sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">6</a></sup>: 98% Clinton, 1.7% Trump </li>
-<li>Princeton Election Consortium<sup><a href="http://election.princeton.edu/2016/11/08/final-mode-projections-clinton-323-ev-51-di-senate-seats-gop-house/">7</a></sup>: 93% Clinton </li>
-<li>538<sup><a href="http://projects.fivethirtyeight.com/2016-election-forecast/">8</a></sup>: 71.4% Clinton, 28.6% Trump </li>
+
+<ul class="collection">
+<li class="collection-item"><b>New York Times</b><sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">5</a></sup>: 85% Clinton, 15% Trump </li>
+<li class="collection-item"><b>Huffington Post</b><sup><a href="http://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html?_r=0">6</a></sup>: 98% Clinton, 1.7% Trump </li>
+<li class="collection-item"><b>Princeton Election Consortium</b><sup><a href="http://election.princeton.edu/2016/11/08/final-mode-projections-clinton-323-ev-51-di-senate-seats-gop-house/">7</a></sup>: 93% Clinton </li>
+<li class="collection-item"><b>538</b><sup><a href="http://projects.fivethirtyeight.com/2016-election-forecast/">8</a></sup>: 71.4% Clinton, 28.6% Trump </li>
 </ul>
 
 <p>Of the mainstream forecasters, only 538 cannot be included in the same bucket of almost-certain Clinton victory. Notice that the other forecasts are consistent with our own results shown in the previous table. How come the forecasters, including us, made such egregious mistakes? As in many statistical problems, the answer lies with the data: <em>garbage in, garbage out</em>.</p>
@@ -234,7 +235,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p><center><img src="../img/blog/bias_influence.png"></center></p>
 
-<p>We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples [REF], but this also indicates that even 538 underestimated the polling biases.</p>
+<p>We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples<sup><a href="ttp://simplystatistics.org/2016/11/09/not-all-forecasters-got-it-wrong/">9</a></sup>, but this also indicates that even 538 underestimated the polling biases.</p>
 
 <p>You can check how the bias impacts the results of each state election for yourself:</p>
 
@@ -527,7 +528,7 @@ generated quantities {
 
 <h4 class="text_h4">Conclusion</h4>
 
-<p>Even though the 2016 election was one of most surprising polling misses in recent years, the result was not a black swan. Nassim Nicholas Taleb pointed out, before the election, that the mainstream forecasts were not reliable due to their significant volatility. According to his model based on option theory, this volatility should have pulled the probabilities toward 50-50<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">9</a></sup>. As a follow-up, if there is general interest, we want to explore a time-series model where the voting intentions follow a random walk. To do this, we need to change the underlying model to allow the unseen random walk influence the polling results. Following Andrew Gelman’s suggestion, we can change the Dirichlet prior to a softmax prior, and then we can make the softmax parameters follow a random walk <sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">10</a></sup>. Let this election be a lesson on how naive treatment of data can lead the media and even the so-called specialists astray.</p>
+<p>Even though the 2016 election was one of most surprising polling misses in recent years, the result was not a black swan. Nassim Nicholas Taleb pointed out, before the election, that the mainstream forecasts were not reliable due to their significant volatility. According to his model based on option theory, this volatility should have pulled the probabilities toward 50-50<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">10</a></sup>. As a follow-up, if there is general interest, we want to explore a time-series model where the voting intentions follow a random walk. To do this, we need to change the underlying model to allow the unseen random walk influence the polling results. Following Andrew Gelman’s suggestion, we can change the Dirichlet prior to a softmax prior, and then we can make the softmax parameters follow a random walk <sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">11</a></sup>. Let this election be a lesson on how naive treatment of data can lead the media and even the so-called specialists astray.</p>
 
 
 <h4 class="text_h4">Authors</h4>
