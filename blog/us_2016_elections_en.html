@@ -229,13 +229,13 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
 
 <h4 class="text_h4">Bias impact</h4>
 
-We encompass all possible polling issues in a bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference from Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:
+<p>We encompass all possible polling issues in a bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference from Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:</p>
 
 <img src="../img/blog/bias_influence.png">
 
-We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples [REF], but this also indicates that even 538 underestimated the polling biases.
+<p>We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples [REF], but this also indicates that even 538 underestimated the polling biases.</p>
 
-You can check how the bias impacts the results of each state election for yourself:
+<p>You can check how the bias impacts the results of each state election for yourself:</p>
 
 <div id="tooltip"></div><!-- div to hold tooltip. -->
 <div id="container" class="svg-container"> </div>
@@ -356,14 +356,20 @@ You can check how the bias impacts the results of each state election for yourse
 
 <p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modelled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
-$$ \alpha_c \sim Uniform(0, 1000), c \in [Trump, Clinton, Ind.] $$
+$$ \alpha_c \sim Uniform(0, 1000) \\
+c \in [Trump, Clinton, Ind.] $$
 
 <p>Then, we have the voting intention in each state, with the national preference as prior:</p>
+
 $$ \theta_s = [\theta^{Trump}_s, \theta^{Clinton}_s, \theta^{Ind.}_s] \\
-   \theta_s \sim Dirichlet(\alpha) $$
+   \theta_s \sim Dirichlet(\alpha) \\
+   s \in States $$
+
 <p>Finally, each poll is modeled as one independent sample of the voting intention of the state:</p>
+
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
-   s \in States, d \in Dates $$
+   d \in Dates $$
+
 <p>After writing this model in Stan (see code in section below), we sample the posteriors of the unkwnown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of unseen variables after observing statiscally related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
 <p>To forecast the probability of each candidate winning the state election, we use the same multinomial likelihood that was used for the inference. However, now the voting intentions are the posterior given the polls, and number of voters is chosen to match 2012 numbers. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
@@ -374,13 +380,14 @@ $$ election_s \sim Multinomial(\theta_s, N_{voters_s}) $$
 
 <p>We sample the election result in all states multiple times, and for each time we calculate the number of electoral colleges won by each candidate, and the corresponding victor.</p>
 
-To add the bias term in our forecast to account for all the polling issues already cited, we make a simple change to the predictive model:
+<p>To add the bias term in our forecast to account for all the polling issues already cited, we make a simple change to the predictive model:</p>
+
 $$ \theta^{bias}_s \leftarrow [\theta^{Trump}_s  + \text{bias}, \theta^{Clinton}_s - \text{bias}, \theta^{Ind.}_s] \\
 bias \sim Uniform(0, \epsilon) \\
 election_s \sim Multinomial(\theta^{bias}_s, N^{voters}_s) \\
 $$
 
-This bias always stochastically favors Trump. In our experiments above, we vary \( \epsilon \) from 0 to 5%.
+<p>This bias always stochastically favors Trump. In our experiments above, we vary \( \epsilon \) from 0 to 5%.</p>
 
 <h4 class="text_h4">Code</h4>
 
@@ -501,7 +508,7 @@ s.setAttribute('data-timestamp', +new Date());
                 </ul>
             </div>
             <div id="mc_embed_signup" class="col l6 s12">
-<form action="//datart.us14.list-manage.com/subscribe/post?u=6c5427b919892fa6791c33d14&amp;id=ff39fe81a4" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                <form action="//datart.us14.list-manage.com/subscribe/post?u=7ce6eb27d2a3f36ad4eb827cf&amp;id=02e357291c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                     <div class="row">
                         <div class="input-field col s8">
                             <i class="mdi-communication-email prefix white-text"></i>
@@ -519,7 +526,7 @@ s.setAttribute('data-timestamp', +new Date());
                         <div class="response" id="mce-success-response" style="display:none"></div>
                     </div> 
                     <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_6c5427b919892fa6791c33d14_ff39fe81a4" tabindex="-1" value=""></div>
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_7ce6eb27d2a3f36ad4eb827cf_02e357291c" tabindex="-1" value=""></div>
                 </form>
             </div>
         </div>
@@ -531,7 +538,6 @@ s.setAttribute('data-timestamp', +new Date());
     </div>
 </footer>
 
-<!--End mc_embed_signup-->
 
 <!--  Scripts-->
 <script src="../min/plugin-min.js"></script>
