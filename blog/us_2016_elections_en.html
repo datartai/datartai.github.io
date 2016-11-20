@@ -232,7 +232,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>We encompass all possible polling issues in a bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference from Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:</p>
 
-<img src="../img/blog/bias_influence.png">
+<p><center><img src="../img/blog/bias_influence.png"></center></p>
 
 <p>We see that even a small polling bias that favors Clinton has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they include a polling bias and do not treat the polls as independent samples [REF], but this also indicates that even 538 underestimated the polling biases.</p>
 
@@ -469,10 +469,13 @@ generated quantities {
     real delta[nb_states];
 
     for(s in 1:nb_states) {
-        epsilon[s] <- uniform_rng(0, bias);
-        delta_t[s] <- fabs(theta[s][1] - fmax(0, fmin(1, theta[s][1] + epsilon[s])));
-        delta_h[s] <- fabs(theta[s][2] - fmin(1, fmax(0, theta[s][2] - epsilon[s])));
-        //delta[s] <- (epsilon[s]/fabs(epsilon[s]))*fmin(delta_t[s], delta_h[s]);
+        if(bias == 0.0)
+            epsilon[s] <- 0.0;
+        else
+            epsilon[s] <- uniform_rng(0, bias);
+
+        delta_t[s] <- fabs(theta[s][1] - fmax(0.0, fmin(1.0, theta[s][1] + epsilon[s])));
+        delta_h[s] <- fabs(theta[s][2] - fmin(1.0, fmax(0.0, theta[s][2] - epsilon[s])));
         delta[s] <- fmin(delta_t[s], delta_h[s]);
         theta_bias[s][1] <- theta[s][1] + delta[s];
         theta_bias[s][2] <- theta[s][2] - delta[s];
