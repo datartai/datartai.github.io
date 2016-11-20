@@ -189,27 +189,27 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <tbody>
   <tr>
     <td>Last poll with good grade (above X)</td>
-    <td>87.27%</td>
-    <td>10.48%</td>
-    <td>2.25%</td>
+    <td>87.3%</td>
+    <td>10.5%</td>
+    <td>2.2%</td>
   </tr>
   <tr>
     <td>Polls with the best 3 grades (over the last month)</td>
-    <td>99.35%</td>
+    <td>99.3%</td>
     <td>0.6%</td>
-    <td>0.05%</td>
+    <td>0.1%</td>
   </tr>
   <tr>
     <td>Last 3 polls with good grade (above Y)</td>
-    <td>99.96%</td>
-    <td>0.02%</td>
-    <td>0.02%</td>
+    <td>100.0%</td>
+    <td>0.0%</td>
+    <td>0.0%</td>
   </tr>
   <tr>
     <td>All from last week</td>
-    <td>100%</td>
-    <td>0%</td>
-    <td>0%</td>
+    <td>100.0%</td>
+    <td>0.0%</td>
+    <td>0.0%</td>
   </tr>
 </tbody>
 </table>
@@ -324,6 +324,7 @@ You can check how the bias impacts the results of each state election for yourse
         .attr("r", 9);
 
     function hue(h) {
+      console.log(h);
       handle.attr("cx", x(h));
         ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
     "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
@@ -352,8 +353,6 @@ You can check how the bias impacts the results of each state election for yourse
 <h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
 
 
-<center><img src="../img/blog/elections_graphical_model.svg" width="60%"></center>
-
 <p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modelled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
 $$ \alpha_c \sim Uniform(0, 1000), c \in [Trump, Clinton, Independents] $$
@@ -364,6 +363,9 @@ $$ \theta_s \sim Dirichlet(\alpha), s \in States $$
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}), s \in States, d \in Dates $$
 
 <p>After writing this model in Stan (see code in section below), we sample the posteriors of the unkwnown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of unseen variables after observing statiscally related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
+
+<center><img src="../img/blog/elections_graphical_model.svg" width="60%"></center>
+
 
 <p>To forecast the probability of each candidate winning the state election, we use the same multinomial likelihood that was used for the inference. However, now the voting intentions are the posterior given the polls, and number of voters is chosen to match 2012 numbers. Thus, for each state we sample the predicted number of votes of each candidate in election day using the following formula:</p>
 
@@ -464,7 +466,7 @@ s.setAttribute('data-timestamp', +new Date());
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
+
 
 </div>
 </div>
