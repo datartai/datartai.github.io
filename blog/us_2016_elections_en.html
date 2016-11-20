@@ -244,13 +244,15 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
 
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script src="../js/blog/uStates.js"></script>
+<script src="map_data.js"></script>
 
 <script>
+    console.log(map_data[0]); // this will show the info it in firebug console
     function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
         return "<h4>"+n+"</h4><table>"+
-            "<tr><td>Clinton</td><td>"+(d.clinton)+"%</td></tr>"+
-            "<tr><td>Trump</td><td>"+(d.trump)+"%</td></tr>"+
-            "<tr><td>Neither</td><td>"+(d.neither)+"%</td></tr>"+
+            "<tr><td>Clinton</td><td>"+(d.clinton*100).toFixed(1)+"%</td></tr>"+
+            "<tr><td>Trump</td><td>"+(d.trump*100).toFixed(1)+"%</td></tr>"+
+            "<tr><td>Others</td><td>"+(d.neither*100).toFixed(1)+"%</td></tr>"+
             "</table>";
     }
 
@@ -261,17 +263,28 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
     "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
     "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
         .forEach(function(d){
-            var trump = Math.round(100*Math.random());
-            var clinton = 100.0 - trump;
-            var neither = 0.0;
-            if(trump > clinton)
-                var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
-            else
-                var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
-
-
-            sampleData[d]={trump: trump, clinton: clinton, neither: neither,
-                           color: color};//d3.interpolate("#448AFF", "#D32F2F")(trump/100.0)};
+            if(d == 'LS'){
+                d = 'LA';
+            }
+            var trump = map_data[0].state_votes[d].trump;
+            var clinton = map_data[0].state_votes[d].clinton;
+            var neither = map_data[0].state_votes[d].others;
+            if(trump > clinton){
+                var aux = map_data[0].state_probs[d].trump;
+                var color = d3.interpolate("#FFCDD2", "#F44336")(aux);
+            }else{
+                var aux = map_data[0].state_probs[d].clinton;
+                var color = d3.interpolate("#BBDEFB", "#448AFF")(aux);
+            }
+            if(d == 'LA'){
+                d = 'LS';
+            }
+            sampleData[d]={
+                trump: trump,
+                clinton: clinton,
+                neither: neither,
+                color: color
+            };
         });
 
     var svg = d3.select("div#container")
@@ -324,7 +337,22 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
         .attr("r", 9);
 
     function hue(h) {
-      console.log(h);
+      console.log(h/100);
+      console.log(map_data.length);
+      var idx = 0;
+      var ok = false;
+      for(var i=0; i<map_data.length; i++){
+        if(map_data[i].bias > h/100){
+            idx = i;
+            ok = true;
+            break;
+        }
+      }
+      if(!ok){
+        idx = map_data.length - 1;
+      }
+      console.log(idx);
+
       handle.attr("cx", x(h));
         ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
     "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
@@ -332,17 +360,29 @@ Princeton Election Consortium: 93% Clinton http://election.princeton.edu/2016/11
     "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
     "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
         .forEach(function(d){
-            var trump = Math.round(100*Math.random());
-            var clinton = 100.0 - trump;
-            var neither = 0.0;
-            if(trump > clinton)
-                var color = d3.interpolate("#FFCDD2", "#D32F2F")(0.1+trump/100.0);
-            else
-                var color = d3.interpolate("#BBDEFB", "#448AFF")(0.1+clinton/100.0);
+            if(d == 'LS'){
+                d = 'LA';
+            }
+            var trump = map_data[idx].state_votes[d].trump;
+            var clinton = map_data[idx].state_votes[d].clinton;
+            var neither = map_data[idx].state_votes[d].others;
+            if(trump > clinton){
+                var aux = map_data[idx].state_probs[d].trump;
+                var color = d3.interpolate("#FFCDD2", "#F44336")(aux);
+            }else{
+                var aux = map_data[idx].state_probs[d].clinton;
+                var color = d3.interpolate("#BBDEFB", "#448AFF")(aux);
+            }
 
-
-            sampleData[d]={trump: trump, clinton: clinton, neither: neither,
-                           color: color};
+            if(d == 'LA'){
+                d = 'LS';
+            }
+            sampleData[d]={
+                trump: trump,
+                clinton: clinton,
+                neither: neither,
+                color: color
+            };
         });
         d3.select("#statesvg").selectAll(".state")
             .style("fill",function(d){ return sampleData[d.id].color; })
@@ -526,7 +566,7 @@ s.setAttribute('data-timestamp', +new Date());
                     <div id="mce-responses" class="clear">
                         <div class="response" id="mce-error-response" style="display:none"></div>
                         <div class="response" id="mce-success-response" style="display:none"></div>
-                    </div> 
+                    </div>
                     <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
                     <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_7ce6eb27d2a3f36ad4eb827cf_02e357291c" tabindex="-1" value=""></div>
                 </form>
