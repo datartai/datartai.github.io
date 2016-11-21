@@ -147,7 +147,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h2 class="center header text_h2">How (<b>not</b>) to forecast an election</h2>
 
-<center><span class="span_h2">We use a hierarchical Bayesian model to show how a simple pro-Trump bias has a huge effect on the 2016 election forecasting results.</span></center>
+<center><span class="span_h2">We use a hierarchical Bayesian model to show how a simple pro-Trump bias has a huge effect on forecasting election results.</span></center>
 <br>
 
 <p>Unlike other countries, where presidential elections follow a simple majority rule, the American election follows a different set of rules that makes it very hard for outsiders to understand what is going on. However, the idea is quite simple: each state has a number of electoral college votes, totaling 538 votes across the nation. The winner candidate of each state election takes all of its electoral college votes (with two exceptions). If a candidate receives 270 electoral votes or more overall, he or she wins the election. This makes the election an interesting forecasting problem. Instead of predicting the total number of votes in each candidate, the problem is forecasting the results of each state individually.</p>
@@ -467,7 +467,7 @@ bias \sim Uniform(0, \epsilon) \\
 election_s \sim Multinomial(\theta^{bias}_s, N^{voters}_s) \\
 $$
 
-<p>This bias always stochastically favors Trump. In our experiments above, we vary \( \epsilon \) from 0 to 5%.</p>
+<p>This bias always stochastically favors Trump. We must subtract the same value from Clinton in order to guarantee \( \theta^{bias} \) remains a valid probability simplex. In our experiments above, we vary \( \epsilon \) from 0 to 5%.</p>
 
 <h4 class="text_h4">Code</h4>
 
@@ -513,6 +513,8 @@ generated quantities {
         else
             epsilon[s] <- uniform_rng(0, bias); // Bias value for this state
 
+        // We must ensure that theta will remain a valid probability simplex,
+        // so we limit delta in a way theta will never be below 0 or above 1
         delta_t[s] <- fabs(theta[s][1] - fmax(0.0, fmin(1.0, theta[s][1] + epsilon[s])));
         delta_h[s] <- fabs(theta[s][2] - fmin(1.0, fmax(0.0, theta[s][2] - epsilon[s])));
         delta[s] <- fmin(delta_t[s], delta_h[s]);
