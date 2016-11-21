@@ -233,7 +233,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>We encompass all possible polling issues in a general bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference for Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:</p>
 
-<p><center><img src="../img/blog/bias_influence.png"></center></p>
+<p><center><img class="responsive-img" src="../img/blog/bias_influence.png"></center></p>
 
 <p>We see that even a small polling bias has a huge effect on the election forecast. This explains why 538 had a more favorable Trump forecast as they included a polling bias and did not treat the polls as independent samples<sup><a href="ttp://simplystatistics.org/2016/11/09/not-all-forecasters-got-it-wrong/">9</a></sup>, but this also indicates that even 538 probably underestimated the polling biases.</p>
 
@@ -261,7 +261,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <div class="row">
 <div class="col s1">
-<br><b>Bias:</b>
+<b>Bias:</b>
 </div>
 <div class="col s4">
 <div id="slider"></div>
@@ -346,7 +346,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
     var slider = svg.append("g")
         .attr("class", "slider")
-        .attr("transform", "translate(" + margin.left + "," + height / 2 + ")");
+        .attr("transform", "translate(" + margin.left + "," + (height / 2 - 15) + ")");
 
     slider.append("line")
         .attr("class", "track")
@@ -441,7 +441,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
 
-
 <p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modeled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
 $$ \alpha_c \sim Uniform(0, 1000) \\
@@ -458,9 +457,9 @@ $$ \theta_s = [\theta^{Trump}_s, \theta^{Clinton}_s, \theta^{Ind.}_s] \\
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
    d \in Dates $$
 
-<p>We wrote this model in Stan<sup><a href="http://mc-stan.org/">10</a></sup> (see code in section below). We sample the posteriors of the unknown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of the unseen variables after observing statistically related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
+<p>We infer the posteriors of the unknown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of the unseen variables after observing statistically related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
-<center><img src="../img/blog/elections_graphical_model.svg" width="60%"></center>
+<center><img class="responsive-img" src="../img/blog/elections_graphical_model.svg" width="60%"></center>
 
 <p>To forecast the probability of each candidate winning the state election, we use the same multinomial likelihood that was used for the inference. However, now the voting intentions are the posterior given the polls, and number of voters is chosen to match 2012 election numbers. Thus, for each state we sample the predicted number of votes of each candidate on election day using the following formula:</p>
 
@@ -479,7 +478,7 @@ $$
 
 <h4 class="text_h4">Code</h4>
 
-Take a look in our <a href="https://github.com/datartai/demos/blob/master/us_2016_elections/us_2016_elections.ipynb">code</a> and feel free to play with it. Here is how we implemented our model in Stan:
+Take a look at our <a href="https://github.com/datartai/demos/blob/master/us_2016_elections/us_2016_elections.ipynb">code</a> and feel free to play with it. Here is how we implemented our model in Stan<sup><a href="http://mc-stan.org/">10</a></sup>:
 
 <pre>
 <code class="stan">data {
@@ -550,12 +549,13 @@ generated quantities {
         <div class="col s6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
-                    <img class="activator" src="../img/pedro.jpg">
+                    <a href="../index.html#team">
+                    <img class="activator responsive-img" src="../img/pedro.jpg">
+                    </a>
                 </div>
                 <div class="card-content">
                     <span class="card-title grey-text text-darken-4">
-                        Pedro Tabacof<br>
-                        <small><em><a class="red-text text-darken-1">CSO</a></em></small>
+                        Pedro Tabacof
                     </span><br>
                     <em><a class="blue-text text-darken-1">&#112;&#116;&#097;&#098;&#097;&#099;&#111;&#102;&#032;&#097;&#116;&#032;&#100;&#097;&#116;&#097;&#114;&#116;&#046;&#099;&#111;&#109;&#046;&#098;&#114;</a></em></span><br>
                     <a class="blue-text text-lighten-2" href="https://github.com/tabacof">
@@ -573,12 +573,13 @@ generated quantities {
         <div class="col s6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
-                    <img class="activator" src="../img/ramon.jpg">
+                    <a href="../index.html#team">
+                    <img class="activator responsive-img" src="../img/ramon.jpg">
+                    </a>                
                 </div>
                 <div class="card-content">
                     <span class="card-title grey-text text-darken-4">
-                        Ramon Oliveira <br>
-                        <small><em><a class="red-text text-darken-1">CTO</a></em></small>
+                        Ramon Oliveira
                     </span><br>
                     <em><a class="blue-text text-darken-1">&#114;&#111;&#108;&#105;&#118;&#101;&#105;&#114;&#097;&#032;&#097;&#116;&#032;&#100;&#097;&#116;&#097;&#114;&#116;&#046;&#099;&#111;&#109;&#046;&#098;&#114;</a></em></span><br>
                     <a class="blue-text text-lighten-2" href="https://github.com/ramon-oliveira">
