@@ -152,31 +152,32 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <h2 class="center header text_h2">Como (<b>não</b>) prever uma eleição</h2>
 <center><span class="span_h2">Nós usamos um modelo Bayesiano para mostrar como um pequeno viés a favor de Trump tem um grande impacto na previsão dos resultados da eleição.</span></center>
 
-<p>Diferente de outros países em que o candidato mais votado é o vencedor, as eleições americanas seguem um padrão diferente que pode confundir alguém de fora. No entanto, a ideia é simples: cada estado americano possui uma quantidade de votos no colégio eleitoral, somando 538 votos para todos estados, e o candidato a presidente que vence pelos votos polulares em um determinado estado leva todos votos do colégio eleitoral deste estado (com duas exceções). Por exemplo, Trump venceu na Flórida e levou os 29 votos dela. Se um candidato receber no total 270 votos ou mais no colégio eleitoral, ele é o vencedor da corrida presidencial. Esse sistema torna as eleições americanas mais difíceis de prever, pois a mudança de resultado em um estado pode ter grande impacto no resultado final (é só lembrar da disputa Bush X Gore, em que a contagem de votos na Flórida determinou quem venceu). Nosso problema, portanto, é prever o resultado em cada um dos 50 estados individualmente, em vez de prever o número total de votos de cada candidato.</p>
+<p>As eleições americanas seguem um padrão diferente de outros lugares do mundo, o que pode causar confusão para alguém de fora dos Estados Unidos. Na maior parte do mundo, o presidente eleito é aquele que recebe o maior número de votos populares. Nos EUA é eleito quem recebe mais votos do colégio eleitoral. O sistema não é tão complexo quanto parece à primeira vista: cada estado americano possui uma quantidade de votos no colégio eleitoral, somando 538 votos para todos estados. O candidato a presidente que vence no voto popular em um determinado estado leva todos votos do colégio eleitoral deste estado (com duas exceções). Por exemplo, Trump venceu na Flórida e levou os 29 votos deste colégio eleitoral. Se um candidato receber 270 votos ou mais no total, ele é o vencedor da corrida presidencial. Esse sistema torna as eleições americanas mais difíceis de prever, pois a mudança de resultado em um único estado pode causar grande impacto no resultado final (um exemplo famoso foi a disputa Bush X Gore, em que a contagem de votos na Flórida determinou quem venceu). Nosso problema, portanto, é prever o resultado em cada um dos 50 estados individualmente, em vez de prever o número total de votos de cada candidato.</p>
 
 <center><span class="span_h2">Fazer previsões é muito difícil, especialmente se for sobre o futuro.<sup><a href="https://en.wikiquote.org/wiki/Niels_Bohr#Disputed" target="_blank">1</a></sup></q></span></center>
 
-<p>Nosso interesse aqui não é prever a eleição que já aconteceu, mas mostrar como um modelo Bayesiano pode ser usado para fazer previsões eleitorais, e por fim propor uma modificação que explica a falha dos previsores e da imprensa em prever a vitória de Trump. Essa falha não é particular de um modelo, mas de qualquer modelo que se baseia nas pesquisas eleitorais sem considerar possíveis vieses e falhas metodológicas.</p>
+<p>Nosso interesse aqui não é prever a eleição que já aconteceu, mas mostrar como um modelo Bayesiano pode ser usado para fazer previsões eleitorais, e propor uma modificação que explica a falha dos previsores e da imprensa em prever a vitória de Trump. Essa falha não é particular de um modelo, mas de qualquer modelo que se baseia nas pesquisas eleitorais sem considerar possíveis vieses e falhas metodológicas.</p>
 
 <h5 class="text_h5">Pesquisas eleitorais</h5>
 
-<p>Em teoria, uma pesquisa eleitoral deveria amostrar a população de maneira aleatória e sem vieses. No entanto, na prática há vários problemas que podem comprometer o uso de pesquisas eleitorais em análises estatísticas simplórias:</p>
+<p>Em teoria, uma pesquisa eleitoral deveria amostrar a população de maneira aleatória e sem vieses. No entanto, na prática existem vários problemas que podem comprometer o uso de pesquisas eleitorais em análises estatísticas simplórias:</p>
+
 <ul class="collection">
     <li class="collection-item"><b>Efeito Shy tory</b><sup><a href="https://en.wikipedia.org/wiki/Shy_Tory_Factor" target="_blank">2</a></sup> / <b>Bradley</b><sup><a href="https://en.wikipedia.org/wiki/Bradley_effect" target="_blank">3</a></sup> / <b>"vergonha"</b>: Eleitores não se sentem confortáveis em revelar suas preferências particulares.</li>
     <li class="collection-item"><b>Viés de seleção</b>: Pessoas que respondem aos pesquisadores de opinião podem ser de um grupo pouco representativo (ex. pessoas que atendem a linhas de telefone fixo).</li>
     <li class="collection-item"><b>Erros de estratificação</b>: Determinação inapropriada das subpopulações quando a amostragem é estratificada.</li>
-    <li class="collection-item"><b>Correlação entre candidatos e (não) votantes</b>: Como votar é opcional nos EUA, as preferências eleitorais de algumas pessoas podem estar correlacionadas com a probabilidade delas (não) votarem no dia da eleição.</li>
-    <li class="collection-item"><b>Mudança de prefêrencia ao longo do tempo</b>: A preferência das pessoas muda com o tempo e com o desenrolar da corrida presidencial (muita gente só decide em quem votar na última semana).</li>
+    <li class="collection-item"><b>Correlação entre candidatos e (não) votantes</b>: Como votar é opcional nos EUA, as preferências eleitorais de algumas pessoas podem estar correlacionadas com a probabilidade delas votarem (ou não) no dia da eleição.</li>
+    <li class="collection-item"><b>Mudança de preferência ao longo do tempo</b>: A preferência das pessoas muda com o tempo e com o desenrolar da corrida presidencial (muita gente só decide em quem votar na última semana).</li>
     <li class="collection-item"><b>Ruído de amostragem</b>: Qualquer amostra de uma população está sujeita a ruído, portanto as estatísticas coletadas não são idênticas às da população em geral.</li>
 </ul>
 
-<p> Previsões eleitorais básicas apenas consideram o último item na estimativa das incertezas e margens de erro. Apenas considerando isso e nada mais, múltiplas pesquisas eleitorais são tratadas como independentes e não-enviesadas, e quanto mais pesquisas você considerar, menores serão as margens de erro, até que se obtem certeza absoluta. Os outros efeitos são vieses que tornam múltiplas pesquisas eleitorais pouco confiáveis e possivelmente inúteis. Como esses vieses não podem ser modelados de maneira direta, pois não há os dados necessários para isso, a única maneira de determiná-los é com fortes suposições sobre a metodologia das pesquisas eleitorais. Outra possibilidade é estimar os vieses a partir de eleições anteriores. Nós não iremos modelar os vieses de maneira exata, mas vamos incluí-los em um termo abrangente que chamaremos de <em>viés</em> a partir de agora. Esse <em>viés</em> é compartilhado por todas pesquisas eleitorais, e nós mostraremos que um pequeno valor favorável a Trump muda completamente as previsões eleitorais.</p>
+<p>Previsões eleitorais básicas apenas consideram o último item na estimativa das incertezas e margens de erro. Apenas considerando isso e nada mais, múltiplas pesquisas eleitorais são tratadas como independentes e não-enviesadas, e quanto mais pesquisas você considerar, menores serão as estimativas das margens de erro. Isso levaria a uma previsão com certeza absoluta, o que nunca é o caso na vida real. Os outros efeitos são vieses que tornam múltiplas pesquisas eleitorais pouco confiáveis e possivelmente inúteis. Como esses vieses não podem ser modelados de maneira direta, pois não há os dados necessários para isso, a única maneira de determiná-los é com fortes suposições sobre a metodologia das pesquisas eleitorais. Outra possibilidade é estimar os vieses a partir de eleições anteriores. Nós não iremos modelar os vieses de maneira exata, mas vamos incluí-los em um termo abrangente que chamaremos de <em>viés</em> a partir de agora. Esse <em>viés</em> é compartilhado por todas as pesquisas eleitorais, e nós mostraremos que um pequeno valor favorável a Trump muda completamente as previsões eleitorais.</p>
 
 <h5 class="text_h5">Previsão</h5>
 
-<p> Nós deixamos os detalhes do nosso modelo Bayesiano de previsão eleitoral no final, para o leitor com conhecimento mais aprofundado em estatística ou análise de dados. Agora nós iremos mostrar o resultados das nossas previsões. Dependendo das pesquisas eleitorais que incluímos no modelo, nós temos resultados consideravelmente diferentes. As pesquisas a serem usadas devem ser recentes e possuir boa qualidade (ou seja, pesquisas que foram conduzidas com metodologia apropriada). Nós usamos a avaliação do site 538 para obter uma nota de qualidade das pesquisas eleitorais americanas<sup><a href="http://projects.fivethirtyeight.com/pollster-ratings/">4</a></sup>. 538 determina essa nota a partir da maneira que a pesquisa foi conduzida e do seu histórico de sucesso. Por exemplo, uma pesquisa conduzida pela internet vai ter nota baixa, enquanto que uma pesquisa conduzida com estratificação vai ter uma nota melhor.</p>
+<p>Nós deixamos os detalhes do nosso modelo Bayesiano de previsão eleitoral em uma seção posterior, para o leitor que queira se aprofundar no modelo estatístico adotado. Nesta seção iremos mostrar o resultados das nossas previsões. Dependendo das pesquisas eleitorais que incluímos no modelo, nós temos resultados consideravelmente diferentes. As pesquisas a serem consideradas devem ser recentes e possuir boa qualidade (ou seja, pesquisas que foram conduzidas com metodologia apropriada). Nós usamos a avaliação do site 538 para obter uma nota de qualidade das pesquisas eleitorais americanas<sup><a href="http://projects.fivethirtyeight.com/pollster-ratings/">4</a></sup>. 538 determina essa nota a partir da maneira que a pesquisa foi conduzida e do seu histórico de sucesso. Por exemplo, uma pesquisa conduzida pela internet vai ter nota baixa, enquanto que uma pesquisa conduzida com estratificação vai ter uma nota melhor.</p>
 
-<p>Nós vemos que a simples escolha de quais pesquisas incluir já tem um grande impacto nas previsões:</p>
+<p>Nós vemos que a simples escolha de quais pesquisas incluir no modelo já possui grande impacto nas previsões:</p>
 <div class="card">
 <div class="card-action">
 <table class="striped" >
@@ -223,17 +224,17 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <li class="collection-item"><b>538</b><sup><a href="http://projects.fivethirtyeight.com/2016-election-forecast/" target="_blank">8</a></sup>: 71.4% Clinton, 28.6% Trump </li>
 </ul>
 
-<p>Apenas 538 não pode ser incluído nos previsores que deram uma vitória quase certa para Clinton. Perceba que o resultado dos outros previsores é consistente com os nossos próprios resultados, exibidos na tabela anterior. Como tantos previsores falharam em prever a vitória de Trump? Como muitos problemas estatísticos, a resposta está nos dados: <em>garbage in, garbage out </em><sup><a href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out
-" target="_blank">9</a></sup>.</p>
+<p>Apenas 538 não pode ser incluído nos previsores que deram uma vitória quase certa para Clinton. Perceba que o resultado dos outros previsores é consistente com os nossos próprios resultados, exibidos na tabela anterior. Como tantos previsores falharam em prever a vitória de Trump? Como muitos problemas estatísticos, a resposta está nos dados: <em>garbage in, garbage out </em><sup><a href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out" target="_blank">9</a></sup>.</p>
+
 <h5 class="text_h5">Impacto do <em>viés</em></h5>
 
-<p>Nós colocamos todos problemas associados às pesquisas eleitorais em um termo geral de <em>viés</em>. Esse termo sempre é favorável a Trump no dia da eleição, pois claramente foi isso que aconteceu em 8 de novembro. O <em>viés</em> pode ser interpretado como uma prefêrencia a Trump que as pesquisas não capturaram. Em vez de fixá-lo em um valor, nós usamos uma variável aleatória com distribuição uniforme. Começamos com <em>viés</em> nulo, em que Clinton é prevista como vitoriosa, e aumentamos o seu intervalo até que Trump seja previsto como vitorioso:</p>
+<p>Nós sintetizamos todos problemas associados às pesquisas eleitorais em um termo geral de <em>viés</em>. Esse termo sempre é favorável a Trump no dia da eleição, pois claramente foi isso que aconteceu em 8 de novembro. O <em>viés</em> pode ser interpretado como uma preferência a Trump que as pesquisas não capturaram. Em vez de fixá-lo em um valor, nós usamos uma variável aleatória com distribuição uniforme (todos valores na faixa considerada possuem a mesma probabilidade de acontecer). Começamos com <em>viés</em> nulo, em que Clinton é prevista como vitoriosa, e aumentamos o seu intervalo até que Trump seja previsto como vitorioso:</p>
 
 <p><center><img class="responsive-img" src="../img/blog/bias_influence_pt.png"></center></p>
 
-<p> Nós vemos que mesmo um pequeno <em>viés</em> nas pesquisas eleitorais possui um grande impacto na previsão da eleição. Isso explica porque o 538 era mais favorável a vitória de Trump: eles também incluíram um termo de viés e não consideraram as pesquisas eleitorais como amostragens independentes<sup><a href="http://simplystatistics.org/2016/11/09/not-all-forecasters-got-it-wrong/">10</a></sup>. Por outro lado, o gráfico acima sugere que até 538 <em>subestimou</em> o viés a favor de Trump.</p>
+<p> Nós vemos que mesmo um pequeno <em>viés</em> nas pesquisas eleitorais causa um grande impacto na previsão da eleição. Isso explica porque o 538 era mais favorável a vitória de Trump: eles também incluíram um termo de viés e não consideraram as pesquisas eleitorais como amostragens independentes<sup><a href="http://simplystatistics.org/2016/11/09/not-all-forecasters-got-it-wrong/">10</a></sup>. Por outro lado, o gráfico acima sugere que até 538 <em>subestimou</em> o viés a favor de Trump.</p>
 
-<p>No mapa interativo abaixo você pode verificar como o <em>viés</em> impacta a eleição em cada estado. Para cada estado nós mostramos a porcentagem de votos prevista para cada candidato. Note que porcentagem de votos é diferente da probabilidade de vencer, pois este depende também da incerteza da predição, o que não é exibido no mapa.</p>
+<p>No mapa interativo abaixo você pode verificar como o <em>viés</em> impacta a eleição em cada estado. Para cada estado nós mostramos a porcentagem de votos prevista para cada candidato. Note que a porcentagem de votos é diferente da probabilidade de vencer, pois este depende também da incerteza da predição, o que não é exibido no mapa.</p>
 
 <style>
 
@@ -437,23 +438,23 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h5 class="text_h5">Modelo Bayesiano hierárquico</h5>
 
-<p>Podemos usar um modelo Bayesiano hierárquico para agregar a informação das pesquisas eleitorais de cada estado de forma a gerar uma previsão global coerente. Em geral, a probabilidade de cada pesquisa é modelada como uma multinomial, com <em>prior</em> Dirichlet (por estado) e <em>hyperprior</em> uniforme (pelo país). Dessa forma, a informação do <em>prior</em> é compartilhada entre estados, permitindo usar <em>hyperpriors</em> pouco informativos. Começamos com uma preferência nacional em relação a cada candidato, modelada como três distribuições uniformes independentes:</p>
+<p>Podemos usar um modelo Bayesiano hierárquico para agregar a informação das pesquisas eleitorais de cada estado de forma a gerar uma previsão global coerente. A probabilidade de cada pesquisa é modelada como uma multinomial, com <em>prior</em> Dirichlet (por estado) e <em>hyperprior</em> uniforme (pelo país). Dessa forma, a informação do <em>prior</em> é compartilhada entre estados, permitindo usar <em>hyperpriors</em> pouco informativos. Começamos com uma preferência nacional em relação a cada candidato, modelada como três distribuições uniformes independentes:</p>
 
 $$ \alpha_c \sim Uniform(0, 1000) \\
 c \in [Trump, Clinton, Ind.] $$
 
-<p>Dessa forma, temos a intenção de voto para cada estado, com a preferência nacional como <em>prior</em>:</p>
+<p>A intenção de voto para cada estado é modelada com a distribuição Dirichlet, com a preferência nacional como <em>prior</em>:</p>
 
 $$ \theta_s = [\theta^{Trump}_s, \theta^{Clinton}_s, \theta^{Ind.}_s] \\
    \theta_s \sim Dirichlet(\alpha) \\
    s \in States $$
 
-<p>Por fim, cada pesquisa eleitoral é modelada como uma amostra independente da intenção de votos do estado:</p>
+<p>Por fim, cada pesquisa eleitoral é modelada como uma amostra independente de uma multinomial, cujos parâmetros são a intenção de voto do estado e o número de pessoas entrevistadas em cada pesquisa eleitoral:</p>
 
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
    d \in Dates $$
 
-<p>Inferimos os <em>posteriors</em> dos parâmetros desconhecidos (intenção de votos dos estados e preferência nacional) dados as variáveis observados (as pesquisas eleitorais que usamos). O <em>posterior</em> é o nosso conhecimento das variáveis latentes após a observação de variáveis que são estatisticamente relacionadas. Dependendo da escolha de quais pesquisas incluir como observações, como explicamos anteriormente, os <em>posteriors</em> e portanto as previsões serão diferentes.</p>
+<p>Inferimos os <em>posteriors</em> dos parâmetros desconhecidos (intenção de votos dos estados e preferência nacional) dados as variáveis observados (as pesquisas eleitorais que incluímos). O <em>posterior</em> é o nosso conhecimento das variáveis latentes após a observação de variáveis que são estatisticamente relacionadas. Dependendo da escolha de quais pesquisas incluir como observações, como explicamos anteriormente, os <em>posteriors</em> são diferentes, portanto as previsões também mudam.</p>
 
 <center><img class="responsive-img" src="../img/blog/elections_graphical_model_pt.svg" width="60%"></center>
 
@@ -461,7 +462,7 @@ $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
 
 $$ election_s \sim Multinomial(\theta_s, N^{voters}_s) $$
 
-<p>O candidato com mais votos leva todos votos do colégio eleitoral do estado (ignoramos as exceções de Nebraska e Maine). Somamos os votos do coleǵio eleitoral de cada candidato, e se um candidato atinge 270 votos ou mais, ele é o vencedor. Repetimos este processo várias vezes para determinar a probabilidade de cada candidato vencer a eleição.</p>
+<p>O candidato com mais votos leva todos votos do colégio eleitoral do estado (ignoramos as exceções de Nebraska e Maine). Somamos os votos do colégio eleitoral de cada candidato, e se um candidato atinge 270 votos ou mais, ele é o vencedor. Repetimos este processo várias vezes para determinar a probabilidade de cada candidato vencer a eleição. Por exemplo, se repetirmos o processo 1000 vezes, e Clinton vencer em 937 casos, a probabilidade dela vencer é 93.7%.</p>
 
 <p>Para adicionar o termo de <em>viés</em> em nossa previsão e levar em consideração todos os problemas de pesquisas eleitorais que citamos, fazemos uma simples mudança no modelo preditivo:</p>
 
@@ -470,7 +471,7 @@ bias \sim Uniform(0, \epsilon) \\
 election_s \sim Multinomial(\theta^{bias}_s, N^{voters}_s) \\
 $$
 
-<p>Este <em>viés</em> sempre favorece Trump estocasticamente. Devemos subtrair o mesmo valor de Clinton, a fim de garantir que \( \theta^{bias} \) permaneça como um simplex probabilístico. Nos experimentos acima, variamos \( \epsilon \) de 0 a 5%.</p>
+<p>Este <em>viés</em> sempre favorece Trump, mas de maneira aleatória e imprevisível. Devemos subtrair o mesmo valor de Clinton, a fim de garantir que \( \theta^{bias} \) permaneça como um simplex probabilístico válido. Nos experimentos acima, variamos \( \epsilon \) de 0 a 5%.</p>
 
 <h5 class="text_h5">Código</h5>
 
@@ -534,9 +535,9 @@ generated quantities {
 
 <h5 class="text_h5">Conclusão</h5>
 
-<p> Nós vemos que mesmo um modelo estatístico razoavelmente sofisticado não é suficiente para combater dados ruins. Um modelo de previsão adequado às eleições americanas necessita incluir os vieses das pesquisas eleitorais, como demonstramos de maneira geral. Para ser mais preciso, é necessário ou fazer suposições sobre a metodologia de cada pesquisa eleitoral, ou calibrar o peso de cada pesquisa a partir de sua confiabilidade histórica. Isso explica 538 ter dado a maior chance de Trump vencer na grande mídia. Um ponto importante a levantar sobre previsões eleitorais é que se você prediz que um candidato vai vencer com 70% de certeza, é esperado que ele perca 30% das vezes. Ou seja, é difícil avaliar as previsões a partir da observação de uma única eleião presidencial.</p>
+<p> Nós vemos que mesmo um modelo estatístico razoavelmente sofisticado não é suficiente para combater dados ruins. Um modelo de previsão adequado às eleições americanas necessita incluir os vieses das pesquisas eleitorais, como demonstramos de maneira geral. Para ser mais preciso, é necessário ou fazer suposições sobre a metodologia de cada pesquisa eleitoral, ou calibrar o peso de cada pesquisa a partir de sua confiabilidade histórica. Isso explica 538 ter dado a maior chance de Trump vencer na grande mídia. Um ponto importante a levantar sobre previsões eleitorais é que se você prediz que um candidato vai vencer com 70% de certeza, é esperado que ele perca 30% das vezes. Ou seja, é difícil avaliar as previsões a partir da observação de uma única eleição presidencial.</p>
 
-<p> Apesar das eleições americanas de 2016 terem sido uma grande surpresa, o resultado não foi um <em>cisne negro</em><sup><a href="https://en.wikipedia.org/wiki/Black_swan_theory">12</a></sup>. Antes das eleições, Nassim Taleb demonstrou que as previsões eleitorais que estavam sendo publicadas não eram confiáveis por conta de sua volatilidade considerável. De acordo com um modelo baseado em teoria de opções, essa volatilidade deveria ter deixado as probabilidades de vitória mais próximas de 50%, que representa a maior incerteza possível<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">13</a></sup>. Se houver interesse, nós gostaríamos de explorar esse modelo, em que as intenções de voto seguem um passeio aleatório. Para fazer isso, podemos seguir a sugestão de Andrew Gelman e mudar o <em>prior</em> Dirichlet para softmax, cujos parâmetros podem seguir um passeio aleatório<sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">14</a></sup>.
+<p> Apesar das eleições americanas de 2016 terem sido uma grande surpresa, o resultado não foi um <em>cisne negro</em><sup><a href="https://en.wikipedia.org/wiki/Black_swan_theory">12</a></sup>. Antes das eleições, Nassim Taleb demonstrou que as previsões eleitorais que estavam sendo publicadas não eram confiáveis por conta de sua volatilidade considerável. De acordo com um modelo baseado em teoria de opções, essa volatilidade deveria ter deixado as probabilidades de vitória mais próximas de 50%, que representa a maior incerteza possível<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">13</a></sup>. Se houver interesse, nós gostaríamos de explorar esse modelo, em que as intenções de voto seguem um passeio aleatório. Para fazer isso, podemos seguir a sugestão de Andrew Gelman e mudar o <em>prior</em> Dirichlet para softmax, cujos parâmetros podem seguir um passeio aleatório<sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">14</a></sup>. 
 
 <h5 class="text_h5">Autores</h5>
 
