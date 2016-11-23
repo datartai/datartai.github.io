@@ -442,7 +442,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
 
-<p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modeled as a multinomial, with Dirichlet prior (per state) and normal hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
+<p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modeled as a multinomial, with Dirichlet prior (per state) and uniform hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
 $$ \alpha_c \sim Uniform(0, 1000) \\
 c \in [Trump, Clinton, Ind.] $$
