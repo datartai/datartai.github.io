@@ -2363,7 +2363,7 @@ span.badge {
     background-color: #26a69a;
     border-radius: 2px; }
   span.badge.new:after {
-    content: " new"; }
+    content: ""; }
 
 nav ul a span.badge {
   position: static;
