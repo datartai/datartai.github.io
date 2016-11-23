@@ -130,10 +130,12 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
                 <ul class="right hide-on-med-and-down">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="#">Blog</a></li>
+                    <li><a href="us_2016_elections_en.html"><span class="red new badge">English</span></a></li>
                 </ul>
                 <ul id="nav-mobile" class="side-nav">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="#">Blog</a></li>
+                    <li><a href="us_2016_elections_en.html"><span class="red new badge">English</span></a></li>
                 </ul>
             <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
             </div>
@@ -150,11 +152,11 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <h2 class="center header text_h2">Como (<b>não</b>) prever uma eleição</h2>
 <center><span class="span_h2">Nós usamos um modelo Bayesiano para mostrar como um pequeno viés a favor de Trump tem um grande impacto na previsão dos resultados da eleição.</span></center>
 
-<p>Diferente de outros países em que o candidato mais votado é o vencedor, as eleições americanas seguem um padrão diferente que pode confundir alguém de fora. No entanto, a ideia é razoavelmente simples: cada estado americano possui uma quantidade de votos no colégio eleitoral, somando 538 votos para todos estados. O candidato a presidente que vence em determinado estado leva todos votos deste estado (com duas exceções). Por exemplo, Trump venceu na Flórida e levou os 29 votos dela. Se um candidato receber no total 270 votos ou mais, ele é o vencedor da corrida presidencial. Esse sistema torna as eleições americanas mais difíceis de prever, pois a mudança de resultado em um estado pode ter grande impacto no resultado final (é só lembrar da disputa Bush X Gore, em que a contagem de votos na Flórida determinou quem venceu). Nosso problema, portanto, é prever o resultado em cada um dos 50 estados individualmente, em vez de prever o número total de votos de cada candidato.</p>
+<p>Diferente de outros países em que o candidato mais votado é o vencedor, as eleições americanas seguem um padrão diferente que pode confundir alguém de fora. No entanto, a ideia é simples: cada estado americano possui uma quantidade de votos no colégio eleitoral, somando 538 votos para todos estados, e o candidato a presidente que vence pelos votos polulares em um determinado estado leva todos votos do colégio eleitoral deste estado (com duas exceções). Por exemplo, Trump venceu na Flórida e levou os 29 votos dela. Se um candidato receber no total 270 votos ou mais no colégio eleitoral, ele é o vencedor da corrida presidencial. Esse sistema torna as eleições americanas mais difíceis de prever, pois a mudança de resultado em um estado pode ter grande impacto no resultado final (é só lembrar da disputa Bush X Gore, em que a contagem de votos na Flórida determinou quem venceu). Nosso problema, portanto, é prever o resultado em cada um dos 50 estados individualmente, em vez de prever o número total de votos de cada candidato.</p>
 
 <center><span class="span_h2">Fazer previsões é muito difícil, especialmente se for sobre o futuro.<sup><a href="https://en.wikiquote.org/wiki/Niels_Bohr#Disputed" target="_blank">1</a></sup></q></span></center>
 
-<p>Nosso interesse não é prever a eleição que já aconteceu, mas mostrar como um modelo Bayesiano pode ser usado para fazer previsões eleitorais, e propor uma modificação que explica a falha dos previsores e da imprensa em prever a vitória de Trump. Essa falha não é particular de um modelo, mas de qualquer modelo que se baseia nas pesquisas eleitorais sem considerar possíveis vieses e falhas metodológicas. </p>
+<p>Nosso interesse aqui não é prever a eleição que já aconteceu, mas mostrar como um modelo Bayesiano pode ser usado para fazer previsões eleitorais, e por fim propor uma modificação que explica a falha dos previsores e da imprensa em prever a vitória de Trump. Essa falha não é particular de um modelo, mas de qualquer modelo que se baseia nas pesquisas eleitorais sem considerar possíveis vieses e falhas metodológicas.</p>
 
 <h5 class="text_h5">Pesquisas eleitorais</h5>
 
@@ -221,7 +223,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <li class="collection-item"><b>538</b><sup><a href="http://projects.fivethirtyeight.com/2016-election-forecast/" target="_blank">8</a></sup>: 71.4% Clinton, 28.6% Trump </li>
 </ul>
 
-<p>Apenas 538 não pode ser incluído nos previsores que deram uma vitória quase certa para Clinton. Perceba que o resultado dos outros previsores é consistente com os nossos próprios resultados, exibidos na tabela anterior. Como tantos previsores falharam em prever a vitória de Trump? Como muitos problemas estatísticos, a resposta está nos dados: <em>garbage in, garbage out</em><sup><a href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out
+<p>Apenas 538 não pode ser incluído nos previsores que deram uma vitória quase certa para Clinton. Perceba que o resultado dos outros previsores é consistente com os nossos próprios resultados, exibidos na tabela anterior. Como tantos previsores falharam em prever a vitória de Trump? Como muitos problemas estatísticos, a resposta está nos dados: <em>garbage in, garbage out </em><sup><a href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out
 " target="_blank">9</a></sup>.</p>
 <h5 class="text_h5">Impacto do <em>viés</em></h5>
 
@@ -237,7 +239,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 .chart div {
   display: inline-block;
-  font: 10px sans-serif;
+  font: 15px sans-serif;
   background-color: steelblue;
   padding: 3px;
   margin: 1px;
