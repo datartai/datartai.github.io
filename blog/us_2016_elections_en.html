@@ -157,7 +157,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>Our interest is not to forecast the election, which is not a random variable anymore (spoiler alert: Trump won). We want to show how a Bayesian forecasting model works, and propose a modification that explains why statistical models would fail so badly if there were polling biases.</p>
 
-<h4 class="text_h4">Polling</h4>
+<h5 class="text_h5">Polling</h5>
 
 <p>In theory, a poll should randomly sample the voting population. However, in practice there are several possible polling problems that can compromise their use in naive statistical analyses:</p>
 <ul class="collection">
@@ -171,7 +171,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>Simple forecasts usually only consider the last item when estimating the margins of error or uncertainty. If you only consider this and nothing more, multiple polls will be treated as independent and unbiased, and the more polls you use, the smaller the forecasting errors will be, until there is almost certainty. The other effects are biases that will make the average of multiple polls unreliable and possibly useless. As they are not directly available for modeling, the only way to estimate them is by making strong assumptions or using polling results from previous elections. We do not attempt to model exactly those issues here, we rather include all of them in a bias term that is shared across all polls, and show that even a small bias term favorable to Trump completely changes the forecast.</p>
 
-<h4 class="text_h4">Forecast</h4>
+<h5 class="text_h5">Forecast</h5>
 
 <p>We leave the details of our hierarchical Bayesian forecasting model at the end, for the advanced reader. Now we show the results of its forecasts. However, depending on which polls we include, we have very different results. The polls to use in a forecasting model should be recent and of good quality (conducted with appropriate methodology and with past successes). As a proxy of quality, we use the grades from 538.<sup><a href="http://projects.fivethirtyeight.com/pollster-ratings/">4</a></sup></p>
 
@@ -200,13 +200,13 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
     <td>0.6%</td>
     <td>0.1%</td>
   </tr>
-  <tr>
+<!---  <tr>
     <td>Last 3 polls with good grade</td>
     <td>100.0%</td>
     <td>0.0%</td>
     <td>0.0%</td>
   </tr>
-  <tr>
+  <tr> -->
     <td>All polls from last week</td>
     <td>100.0%</td>
     <td>0.0%</td>
@@ -230,7 +230,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 
 <p>Of the mainstream forecasters, only 538 cannot be included in the same bucket of certain Clinton victory. Notice that the other forecasts are consistent with our own results shown in the previous table. How come the forecasters, including us, made such egregious mistakes? As in many statistical problems, the answer lies with the data: <em>garbage in, garbage out</em>.</p>
 
-<h4 class="text_h4">Bias impact</h4>
+<h5 class="text_h5">Bias impact</h5>
 
 <p>We encompass all possible polling issues in a general bias term. We use a bias term that is favorable to Trump on election day because that is clearly what happened on November 8. This can be interpreted as a hidden preference for Trump that is not captured by the polls by all the issues explained before. Instead of fixing the bias to an arbitrary value, we use a uniform random variable. We start with zero bias, where Clinton is almost surely the victor, and increase its span until Trump is almost certainly the victor:</p>
 
@@ -440,9 +440,9 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
     }
 </script>
 
-<h4 class="text_h4">Hierarchical Bayesian forecasting model</h4>
+<h5 class="text_h5">Hierarchical Bayesian forecasting model</h5>
 
-<p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modeled as a multinomial, with Dirichlet prior (per state) and uniform hyperprior (per nation). This way, prior information is shared across states and we can use weak hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
+<p>We can use a hierarchical Bayesian model to aggregate the information of each state poll to form a globally coherent forecast. Overall, each poll’s likelihood is modeled as a multinomial, with Dirichlet prior (per state) and uniform hyperprior (per nation). This way, prior information is shared across states and we can use weakly informative hyperpriors. We start with an overall national preference over each candidate, modeled as three independent wide uniform distributions:</p>
 
 $$ \alpha_c \sim Uniform(0, 1000) \\
 c \in [Trump, Clinton, Ind.] $$
@@ -458,7 +458,7 @@ $$ \theta_s = [\theta^{Trump}_s, \theta^{Clinton}_s, \theta^{Ind.}_s] \\
 $$ poll_{s,d} \sim Multinomial(\theta_s, N_{poll_{s,d}}) \\
    d \in Dates $$
 
-<p>We infer the posteriors of the unknown parameters (state voting intentions and national preferences) given the observed parameters (the polls we decided to include). The posterior is our knowledge of the unseen variables after observing statistically related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
+<p>We infer the posteriors of the unknown parameters (state voting intentions and national preferences) given the observed variables (the polls we decided to include). The posterior is our knowledge of the unseen variables after observing statistically related variables. Depending on the choice of which polls to include as observations, as we explained before, the posteriors and thus the forecast will be different.</p>
 
 <center><img class="responsive-img" src="../img/blog/elections_graphical_model.svg" width="60%"></center>
 
@@ -477,7 +477,7 @@ $$
 
 <p>This bias always stochastically favors Trump. We must subtract the same value from Clinton in order to guarantee \( \theta^{bias} \) remains a valid probability simplex. In our experiments above, we vary \( \epsilon \) from 0 to 5%.</p>
 
-<h4 class="text_h4">Code</h4>
+<h5 class="text_h5">Code</h5>
 
 Take a look at our <a href="https://github.com/datartai/demos/blob/master/us_2016_elections/us_2016_elections.ipynb">code</a> and feel free to play with it. Here is how we implemented our model in Stan<sup><a href="http://mc-stan.org/">10</a></sup>:
 
@@ -537,13 +537,13 @@ generated quantities {
 </code>
 </pre>
 
-<h4 class="text_h4">Conclusion</h4>
+<h5 class="text_h5">Conclusion</h5>
 
 <p>We have found that even a modestly sophisticated statistical model does very little to counter unreliable data. A proper forecasting model for the American elections must include polling biases, as we have shown in a general way. To arrive at a precise number, you must either make assumptions on the polling methodology, or calibrate the polls weights using their historical reliability. This could be the reason that 538 had Trump winning at the highest probability of the mainstream media. We have also to consider that when you forecast 70% probability of winning, the prediction is expected to fail 30% of the time, so it is hard to evaluate models and forecasters using only one observation.</p>
 
 <p>Even though the 2016 election was one of most surprising polling misses in recent years, the result was not a black swan. Nassim Nicholas Taleb pointed out, before the election, that the mainstream forecasts were not reliable due to their significant volatility. According to his model based on option theory, this volatility should have pulled the probabilities toward 50-50<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">11</a></sup>. As a follow-up, if there is interest, we want to explore a time-series model where the voting intentions follow a random walk. To do this, we need to change the underlying model to allow the unseen random walk influence the polling results. Following Andrew Gelman’s suggestion, we can change the Dirichlet prior to a softmax prior, and then we can make the softmax parameters follow a random walk <sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">12</a></sup>.
 
-<h4 class="text_h4">Authors</h4>
+<h5 class="text_h5">Authors</h5>
 
 <div class="container">
     <div class="row">
@@ -597,45 +597,6 @@ generated quantities {
         </div>
     </div>
 </div>
-
-
-<!-- <div id="content" class="row">
-  <div class="col" >
-    <img src="../img/pedro.jpg" height="75px" alt=""/>
-  </div>
-  <div class="col" >
-    <h5>Pedro Tabacof</h5>
-    Co-founder and chief science officer at Datart.
-    <a class="blue-text text-lighten-2" href="https://github.com/tabacof">
-    <i class="fa fa-github-square"></i>
-    </a>
-    <a class="blue-text text-lighten-2" href="https://twitter.com/pedrotabacof">
-    <i class="fa fa-twitter-square"></i>
-    </a>
-    <a class="blue-text text-lighten-2" href="https://br.linkedin.com/in/tabacof">
-    <i class="fa fa-linkedin-square"></i>
-    </a>
-  </div>
-</div>
-
-<div id="content" class="row">
-  <div class="col" >
-    <img src="../img/ramon.jpg" height="75px" alt=""/>
-  </div>
-  <div class="col">
-    <h5>Ramon Oliveira</h5>
-    Co-founder and chief technological officer at Datart.
-    <a class="blue-text text-lighten-2" href="https://github.com/ramon-oliveira">
-        <i class="fa fa-github-square"></i>
-    </a>
-    <a class="blue-text text-lighten-2" href="https://twitter.com/ramon_roliveira">
-        <i class="fa fa-twitter-square"></i>
-    </a>
-    <a class="blue-text text-lighten-2" href="https://www.linkedin.com/in/ramon-roliveira">
-        <i class="fa fa-linkedin-square"></i>
-    </a>
-  </div>
-</div> -->
 
 </div>
 </div>
