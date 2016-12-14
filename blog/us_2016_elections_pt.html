@@ -147,7 +147,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <div id="intro" class="section scrollspy">
 <div class="container">
 <div class="row">
-<div class="col s9 offset-s1">
+<div class="col s12 m10 l10 offset-l1 offset-m1">
 <span class="grey-text"><em>Postado em 21 de novembro, 2016</em></span>
 <h2 class="center header text_h2">Como (<b>não</b>) prever uma eleição</h2>
 <center><span class="span_h2">Nós usamos um modelo Bayesiano para mostrar como um pequeno viés a favor de Trump tem um grande impacto na previsão dos resultados da eleição.</span></center>
@@ -260,8 +260,8 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <div class="col s1">
 <b>Viés:</b>
 </div>
-<div class="col s4">
-<div id="slider"></div>
+<div class="col s9">
+    <div id="slider"></div>
 </div>
 </div>
 
@@ -330,8 +330,17 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
                 .attr("id", "statesvg");
     /* draw states on id #statesvg */
     uStates.draw('#statesvg', sampleData, tooltipHtml);
-
-    var svg = d3.select("#slider").append("svg").attr("height", "50").attr("width", "600"),
+    var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+    console.log(width);
+    if(width < 600){
+        width -= 20;
+    }else{
+        width /= 2;
+        width = Math.round(width);
+    }
+    var svg = d3.select("#slider").append("svg").attr("height", "50").attr("width", String(width)),
         margin = {right: 50, left: 50},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height");
@@ -372,8 +381,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
         .attr("r", 9);
 
     function hue(h) {
-      console.log(h/100);
-      console.log(map_data.length);
       var idx = 0;
       var ok = false;
       for(var i=0; i<map_data.length; i++){
@@ -386,7 +393,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
       if(!ok){
         idx = map_data.length - 1;
       }
-      console.log(idx);
       var trump_evotes = 0;
       var clinton_evotes = 0;
 
@@ -537,13 +543,13 @@ generated quantities {
 
 <p> Nós vemos que mesmo um modelo estatístico razoavelmente sofisticado não é suficiente para combater dados ruins. Um modelo de previsão adequado às eleições americanas necessita incluir os vieses das pesquisas eleitorais, como demonstramos de maneira geral. Para ser mais preciso, é necessário ou fazer suposições sobre a metodologia de cada pesquisa eleitoral, ou calibrar o peso de cada pesquisa a partir de sua confiabilidade histórica. Isso explica 538 ter dado a maior chance de Trump vencer na grande mídia. Um ponto importante a levantar sobre previsões eleitorais é que se você prediz que um candidato vai vencer com 70% de certeza, é esperado que ele perca 30% das vezes. Ou seja, é difícil avaliar as previsões a partir da observação de uma única eleição presidencial.</p>
 
-<p> Apesar das eleições americanas de 2016 terem sido uma grande surpresa, o resultado não foi um <em>cisne negro</em><sup><a href="https://en.wikipedia.org/wiki/Black_swan_theory">12</a></sup>. Antes das eleições, Nassim Taleb demonstrou que as previsões eleitorais que estavam sendo publicadas não eram confiáveis por conta de sua volatilidade considerável. De acordo com um modelo baseado em teoria de opções, essa volatilidade deveria ter deixado as probabilidades de vitória mais próximas de 50%, que representa a maior incerteza possível<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">13</a></sup>. Se houver interesse, nós gostaríamos de explorar esse modelo, em que as intenções de voto seguem um passeio aleatório. Para fazer isso, podemos seguir a sugestão de Andrew Gelman e mudar o <em>prior</em> Dirichlet para softmax, cujos parâmetros podem seguir um passeio aleatório<sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">14</a></sup>. 
+<p> Apesar das eleições americanas de 2016 terem sido uma grande surpresa, o resultado não foi um <em>cisne negro</em><sup><a href="https://en.wikipedia.org/wiki/Black_swan_theory">12</a></sup>. Antes das eleições, Nassim Taleb demonstrou que as previsões eleitorais que estavam sendo publicadas não eram confiáveis por conta de sua volatilidade considerável. De acordo com um modelo baseado em teoria de opções, essa volatilidade deveria ter deixado as probabilidades de vitória mais próximas de 50%, que representa a maior incerteza possível<sup><a href="https://mishtalk.com/2016/08/07/nassim-telab-blasts-nate-silver-about-election-odds-in-series-of-tweets/">13</a></sup>. Se houver interesse, nós gostaríamos de explorar esse modelo, em que as intenções de voto seguem um passeio aleatório. Para fazer isso, podemos seguir a sugestão de Andrew Gelman e mudar o <em>prior</em> Dirichlet para softmax, cujos parâmetros podem seguir um passeio aleatório<sup><a href="http://andrewgelman.com/2009/04/29/conjugate_prior/">14</a></sup>.
 
 <h5 class="text_h5">Autores</h5>
 
 <div class="container">
     <div class="row">
-        <div class="col s6">
+        <div class="col s12 m6 l6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
                     <a href="../index.html#team">
@@ -567,7 +573,7 @@ generated quantities {
                 </div>
             </div>
         </div>
-        <div class="col s6">
+        <div class="col s12 m6 l6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
                     <a href="../index.html#team">

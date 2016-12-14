@@ -147,7 +147,7 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <div id="intro" class="section scrollspy">
 <div class="container">
 <div class="row">
-<div class="col s9 offset-s1">
+<div class="col s12 m10 l10 offset-l1 offset-m1">
 <span class="grey-text"><em>Posted on November 21, 2016</em></span>
 <h2 class="center header text_h2">How (<b>not</b>) to forecast an election</h2>
 <center><span class="span_h2">We use a hierarchical Bayesian model to show how a simple pro-Trump bias has a huge effect on forecasting election results.</span></center>
@@ -266,8 +266,8 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
 <div class="col s1">
 <b>Bias:</b>
 </div>
-<div class="col s4">
-<div id="slider"></div>
+<div class="col s9">
+    <div id="slider"></div>
 </div>
 </div>
 
@@ -337,7 +337,17 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
     /* draw states on id #statesvg */
     uStates.draw('#statesvg', sampleData, tooltipHtml);
 
-    var svg = d3.select("#slider").append("svg").attr("height", "50").attr("width", "600"),
+    var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+    console.log(width);
+    if(width < 600){
+        width -= 20;
+    }else{
+        width /= 2;
+        width = Math.round(width);
+    }
+    var svg = d3.select("#slider").append("svg").attr("height", "50").attr("width", String(width)),
         margin = {right: 50, left: 50},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height");
@@ -378,8 +388,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
         .attr("r", 9);
 
     function hue(h) {
-      console.log(h/100);
-      console.log(map_data.length);
       var idx = 0;
       var ok = false;
       for(var i=0; i<map_data.length; i++){
@@ -392,7 +400,6 @@ auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0
       if(!ok){
         idx = map_data.length - 1;
       }
-      console.log(idx);
       var trump_evotes = 0;
       var clinton_evotes = 0;
 
@@ -549,7 +556,7 @@ generated quantities {
 
 <div class="container">
     <div class="row">
-        <div class="col s6">
+        <div class="col s12 m6 l6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
                     <a href="../index.html#team">
@@ -573,7 +580,7 @@ generated quantities {
                 </div>
             </div>
         </div>
-        <div class="col s6">
+        <div class="col s12 m6 l6">
             <div class="card card-avatar">
                 <div class="waves-effect waves-block waves-light">
                     <a href="../index.html#team">
