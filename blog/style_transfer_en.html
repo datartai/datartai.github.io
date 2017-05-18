@@ -60,23 +60,18 @@
   <div class="col s12 m10 l10 offset-l1 offset-m1">
     <span class="grey-text"><em>Posted on Abril xx, 2017</em></span>
     <h2 class="center header text_h2">Brazilian paintings style transfer</h2>
-    <center><span class="span_h2">We use famous brazilian paintings to explain the concepts behind some photo filters.</span></center>
-    <br>
+    <center>We use famous brazilian paintings to explain the concepts behind some photo filters.</center>
 
-    <form id="form" action="" method=post enctype=multipart/form-data>
     <div class="col s4">
     <div class="card">
       <div class="card-image">
         <img class="materialboxed" src="../img/blog/style_transfer/gloria.jpg">
         <span class="card-title">Original</span>
       </div>
-      <!-- <label for="fileselect">Upload your photo:</label> -->
-      <!-- <input type="file" id="fileselect" name="file" accept="image/*"> -->
     </div>
     </div>
-    </form>
 
-    <div class="col s4">
+    <!-- <div class="col s4">
     <div class="card">
       <div class="carousel">
           <a class="carousel-item" href="#one!"><img src="../img/blog/style_transfer/tarsila2.jpg"></a>
@@ -90,6 +85,14 @@
           <div class="carousel-fixed-item center">
             <h4>Style</h4>
           </div>
+      </div>
+    </div>
+    </div> -->
+    <div class="col s4">
+    <div class="card">
+      <div class="card-image">
+        <img class="materialboxed"  src="../img/blog/style_transfer/tarsila2.jpg">
+        <span class="card-title">Style</span>
       </div>
     </div>
     </div>
@@ -204,14 +207,9 @@ $(document).ready(function(){
     $('.carousel').carousel();
     $('.carousel.carousel-slider').carousel({fullWidth: true});
     $('.carousel-item').click(function(data){console.log(data);});
+    $('.materialboxed').materialbox();
 });
-//
-// $(document).ready(function(){
-//     $('.materialboxed').materialbox();
-//   });
 </script>
-
-
 
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
